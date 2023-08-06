@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = [
+  ".", 
+  "src",
+]
+
+[project]
+name = "aoc-py"
+version = "0.0.1"
+authors = [
+  { name="Ken Smith" },
+]
+description = "Python solutions to Advent of Code challenges"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Ken-2scientists/aoc-py"
