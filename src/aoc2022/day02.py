@@ -1,7 +1,5 @@
 """ Solution to https://adventofcode.com/2022/day/2"""
-
-# from utils.core import split_at_blanklines, parse_puzzle_input
-from pipe import map
+from pipe import map, filter
 
 # Input parsing
 
@@ -10,6 +8,21 @@ def parse(input):
     return [str.split(x) for x in input]
 
 # Puzzle logic
+
+
+permutations = [['rock',     'rock',     'draw'],
+                ['rock',     'paper',    'win'],
+                ['rock',     'scissors', 'lose'],
+                ['paper',    'rock',     'lose'],
+                ['paper',    'paper',    'draw'],
+                ['paper',    'scissors', 'win'],
+                ['scissors', 'rock',     'win'],
+                ['scissors', 'paper',    'lose'],
+                ['scissors', 'scissors', 'draw']]
+
+outcomes = {(p1, p2): outcome for p1, p2, outcome in permutations}
+
+moves = {(p1, outcome): p2 for p1, p2, outcome in permutations}
 
 
 def guide_p1move(code):
@@ -34,18 +47,16 @@ def guide_p2move(code):
     return codes[code]
 
 
-def outcomes(pair):
-    p1, p2 = pair
-    outcomes = {('rock', 'rock'): 'draw',
-                ('rock', 'paper'): 'win',
-                ('rock', 'scissors'): 'lose',
-                ('paper', 'rock'): 'lose',
-                ('paper', 'paper'): 'draw',
-                ('paper', 'scissors'): 'win',
-                ('scissors', 'rock'): 'win',
-                ('scissors', 'paper'): 'lose',
-                ('scissors', 'scissors'): 'draw'}
-    return outcomes[(p1, p2)]
+def guide_p2outcome(code):
+    """
+    Anyway, the second column says how the round needs to end: 
+    X means you need to lose, Y means you need to end the round in a draw, and 
+    Z means you need to win.
+    """
+    codes = {'X': 'lose',
+             'Y': 'draw',
+             'Z': 'win'}
+    return codes[code]
 
 
 def shape_score(shape):
@@ -70,27 +81,47 @@ def outcome_score(outcome):
     return scores[outcome]
 
 
-def interpret(round):
+def interpret1(round):
     l, r = round
-    return [guide_p1move(l), guide_p2move(r)]
+    return [guide_p1move(l), guide_p2move(r), None]
 
 
-def round_score(pair):
-    _, p2 = pair
-    outcome = outcomes(pair)
-    return outcome_score(outcome) + shape_score(p2)
+def interpret2(round):
+    l, r = round
+    return [guide_p1move(l), None, guide_p2outcome(r)]
 
 
-def total_score(input):
-    return sum(input | map(interpret) | map(round_score))
+def fill_in(round):
+    p1, p2, o = round
+    if o == None:
+        return [p1, p2, outcomes[(p1, p2)]]
+    else:
+        return [p1, moves[(p1, o)], o]
+
+
+def round_score(round):
+    _, p2, o = round
+    return outcome_score(o) + shape_score(p2)
+
+
+def total_score(input, interpret):
+    return sum(input | map(interpret) | map(fill_in) | map(round_score))
 
 
 # Puzzle solutions
 
 
 def day02_part1(input):
-    return total_score(input)
+    """
+    What would your total score be if everything goes exactly according to your 
+    strategy guide?
+    """
+    return total_score(input, interpret1)
 
 
-# def day02_part2(input):
-#     return 2
+def day02_part2(input):
+    """
+    Following the Elf's instructions for the second column, what would your 
+    total score be if everything goes exactly according to your strategy guide?
+    """
+    return total_score(input, interpret2)
