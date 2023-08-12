@@ -21,3 +21,6 @@ build-backend = "pdm.backend"
 dev = [
     "pytest>=7.4.0",
 ]
+
+[tool.pdm.scripts]
+test = "pytest"
