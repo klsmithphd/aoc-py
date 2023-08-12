@@ -1,0 +1,22 @@
+name: Python PDM CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v3.3
+      with:
+        python-version: 3.10
+        cache: true
+    - name: Install dependencies
+      run: pdm install
+    - name: Run tests
+      run: pdm run test
