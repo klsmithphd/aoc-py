@@ -1,15 +1,3 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
-pythonpath = [
-  "src",
-]
-
 [project]
 name = "aoc-py"
 version = "0.0.1"
@@ -18,11 +6,18 @@ authors = [
 ]
 description = "Python solutions to Advent of Code challenges"
 readme = "README.md"
-requires-python = ">=3.7"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = [
+    "pipe>=2.0",
+    "more-itertools>=10.1.0",
 ]
 
-[project.urls]
-"Homepage" = "https://github.com/Ken-2scientists/aoc-py"
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.4.0",
+]
