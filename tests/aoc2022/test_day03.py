@@ -43,8 +43,8 @@ def test_priority():
 
 
 def test_overlap_priority_sum():
-    assert 157 == overlap_priority_sum(d03_sample)
-    assert 70 == overlap_priority_sum(d03_sample, split_half=False)
+    assert 157 == overlap_priority_sum(d03_sample, part1=True)
+    assert 70 == overlap_priority_sum(d03_sample, part1=False)
 
 
 d03_input = standard_puzzle_input(year=2022, day=3)
