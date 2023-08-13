@@ -1,5 +1,6 @@
 """Solution to https://adventofcode.com/2022/day/3"""
-from more_itertools import sliced
+from functools import reduce, partial
+from more_itertools import sliced, chunked
 from pipe import map, Pipe
 from utils.core import AoCSolution
 
@@ -16,13 +17,16 @@ def split_in_half(s: str):
     return sliced(s, len(s)//2)
 
 
+def chunked_in_thirds(seq: list[str]):
+    return chunked(seq, 3)
+
+
+def set_intersection(x: set, y: set):
+    return x.intersection(y)
+
+
 def overlap(splits):
-    s1, s2 = splits
-    return set(s1).intersection(set(s2)).pop()
-
-
-def overlaps(splits_seq):
-    return splits_seq | map(overlap)
+    return reduce(set_intersection, splits | map(set)).pop()
 
 
 def priority(c: str):
@@ -32,8 +36,9 @@ def priority(c: str):
         return ord(c) - ord("a") + 1
 
 
-def overlap_priority_sum(seq):
-    return sum(seq | map(split_in_half) | map(overlap) | map(priority))
+def overlap_priority_sum(seq, split_half=True):
+    chunks = seq | map(split_in_half) if split_half else chunked_in_thirds(seq)
+    return sum(chunks | map(overlap) | map(priority))
 
 # Puzzle solutions
 
@@ -41,4 +46,4 @@ def overlap_priority_sum(seq):
 day03_soln = \
     AoCSolution(parse,
                 p1=overlap_priority_sum,
-                p2=overlap_priority_sum)
+                p2=partial(overlap_priority_sum, split_half=False))
