@@ -116,7 +116,7 @@ def day02_part1(input):
     What would your total score be if everything goes exactly according to your 
     strategy guide?
     """
-    return total_score(input, interpret1)
+    return total_score(parse(input), interpret1)
 
 
 def day02_part2(input):
@@ -124,4 +124,4 @@ def day02_part2(input):
     Following the Elf's instructions for the second column, what would your 
     total score be if everything goes exactly according to your strategy guide?
     """
-    return total_score(input, interpret2)
+    return total_score(parse(input), interpret2)

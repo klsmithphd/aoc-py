@@ -15,7 +15,7 @@ def input_path(year: int, day: int) -> str:
     return f"inputs/{year}/day{day:02}-input.txt"
 
 
-def puzzle_input(filename):
+def puzzle_input(filename) -> list[str]:
     """ 
     Load a puzzle input from the provided filename, returning a list of the
     lines of the input as strings
@@ -26,15 +26,14 @@ def puzzle_input(filename):
     return lines
 
 
-def parse_puzzle_input(parse, year=None, day=None, filename=None):
+def standard_puzzle_input(year: int, day: int) -> list[str]:
+    """ 
+    Load a puzzle input for the given `year` and `day`, assuming that
+    all puzzle inputs are stored in the `inputs` directory, in a 
+    sub-directory per year, and each file is named according to the
+    convention `dayNN-input.txt`
     """
-    Load and parse a puzzle input for the given `year` and `day`, 
-    using the `parse` function provided.
-
-    This expects that all files 
-    """
-    fname = input_path(year, day) if year and day else filename
-    return list(parse(puzzle_input(fname)))
+    return puzzle_input(input_path(year, day))
 
 
 @Pipe

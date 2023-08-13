@@ -1,6 +1,6 @@
 from aoc2022.day02 import parse, interpret1, interpret2, fill_in, \
     round_score, total_score, day02_part1, day02_part2
-from utils.core import parse_puzzle_input
+from utils.core import standard_puzzle_input
 from pipe import map
 
 d02_s01_raw = """A Y
@@ -56,7 +56,7 @@ def test_total_score():
     assert 12 == total_score(d02_s01, interpret2)
 
 
-d02_input = parse_puzzle_input(parse, year=2022, day=2)
+d02_input = standard_puzzle_input(year=2022, day=2)
 
 
 def test_day02_part1_soln():

@@ -38,7 +38,7 @@ def day01_part1(input):
     Find the Elf carrying the most Calories. 
     How many total Calories is that Elf carrying?
     """
-    return top_n_capacity_sum(input, 1)
+    return top_n_capacity_sum(parse(input), 1)
 
 
 def day01_part2(input):
@@ -46,4 +46,4 @@ def day01_part2(input):
     Find the top three Elves carrying the most Calories. 
     How many Calories are those Elves carrying in total?
     """
-    return top_n_capacity_sum(input, 3)
+    return top_n_capacity_sum(parse(input), 3)
