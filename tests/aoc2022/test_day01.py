@@ -28,8 +28,8 @@ def test_parse():
 
 
 def test_top_n_capacity_sum():
-    assert 24000 == top_n_capacity_sum(1, d01_s01)
-    assert 45000 == top_n_capacity_sum(3, d01_s01)
+    assert 24000 == top_n_capacity_sum(d01_s01, 1)
+    assert 45000 == top_n_capacity_sum(d01_s01, 3)
 
 
 d01_input = parse_puzzle_input(parse, year=2022, day=1)

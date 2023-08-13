@@ -24,7 +24,7 @@ def sorted_totals(calories):
     return calories | map(sum) | sort(reverse=True)
 
 
-def top_n_capacity_sum(n, calories):
+def top_n_capacity_sum(calories, n):
     """
     Return the sum of the top `n` totals
     """
@@ -38,7 +38,7 @@ def day01_part1(input):
     Find the Elf carrying the most Calories. 
     How many total Calories is that Elf carrying?
     """
-    return top_n_capacity_sum(1, input)
+    return top_n_capacity_sum(input, 1)
 
 
 def day01_part2(input):
@@ -46,4 +46,4 @@ def day01_part2(input):
     Find the top three Elves carrying the most Calories. 
     How many Calories are those Elves carrying in total?
     """
-    return top_n_capacity_sum(3, input)
+    return top_n_capacity_sum(input, 3)
