@@ -1,7 +1,24 @@
-""" Common utilities for many Advent of Code solutions """
+"""Common utilities for many Advent of Code solutions"""
 
 from more_itertools import split_at
 from pipe import Pipe
+
+
+class AoCSolution():
+    """Simple wrapper class for Advent of Code solutions"""
+
+    def __init__(self, parse, p1, p2):
+        self.parse = parse
+        self.p1 = p1
+        self.p2 = p2
+
+    def part1(self, input):
+        "Return the part1 solution for the day's puzzle, given `input`"
+        return self.p1(self.parse(input))
+
+    def part2(self, input):
+        "Return the part2 solution for the day's puzzle, given `input`"
+        return self.p2(self.parse(input))
 
 
 def input_path(year: int, day: int) -> str:

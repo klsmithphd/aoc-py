@@ -17,7 +17,7 @@ if __name__ == "__main__":
     filename = args.input if args.input else input_path(args.year, args.day)
     input = puzzle_input(filename)
 
-    soln1, soln2 = solutions[args.year][args.day]
+    soln = solutions[args.year][args.day]
     print(f"Advent of Code {args.year}, Day {args.day}, using {filename}")
-    print(f"Part 1 solution: {soln1(input)}")
-    print(f"Part 2 solution: {soln2(input)}")
+    print(f"Part 1 solution: {soln.part1(input)}")
+    print(f"Part 2 solution: {soln.part2(input)}")
