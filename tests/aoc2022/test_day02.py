@@ -1,5 +1,5 @@
-from aoc2022.day02 import parse, interpret1, interpret2, fill_in, \
-    round_score, total_score, day02_soln
+from aoc2022.day02 import parse, part1, part2, interpret1, interpret2, \
+    fill_in, round_score, total_score
 from utils.core import standard_puzzle_input
 from pipe import map
 
@@ -9,6 +9,7 @@ C Z
 """.splitlines()
 
 d02_s01 = parse(d02_s01_raw)
+d02_input = parse(standard_puzzle_input(year=2022, day=2))
 
 
 def test_parse():
@@ -56,12 +57,9 @@ def test_total_score():
     assert 12 == total_score(d02_s01, interpret2)
 
 
-d02_input = standard_puzzle_input(year=2022, day=2)
-
-
 def test_day02_part1_soln():
-    assert 11906 == day02_soln.part1(d02_input)
+    assert 11906 == part1(d02_input)
 
 
 def test_day02_part2_soln():
-    assert 11186 == day02_soln.part2(d02_input)
+    assert 11186 == part2(d02_input)

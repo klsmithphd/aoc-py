@@ -1,5 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/3"""
-from functools import reduce, partial
+from functools import reduce
 from more_itertools import sliced, chunked
 from pipe import map
 from utils.core import AoCSolution
@@ -58,12 +58,20 @@ def overlap_priority_sum(seq, part1=True):
 # Puzzle solutions
 
 
-day03_soln = \
-    AoCSolution(
-        parse,
-        # Find the item type that appears in both compartments of each
-        # rucksack. What is the sum of the priorities of those item types?
-        p1=partial(overlap_priority_sum, part1=True),
-        # Find the item type that corresponds to the badges of each three-Elf
-        # group. What is the sum of the priorities of those item types?"
-        p2=partial(overlap_priority_sum, part1=False))
+def part1(input):
+    """
+    Find the item type that appears in both compartments of each
+    rucksack. What is the sum of the priorities of those item types?
+    """
+    return overlap_priority_sum(input, part1=True)
+
+
+def part2(input):
+    """
+    Find the item type that corresponds to the badges of each three-Elf
+    group. What is the sum of the priorities of those item types?
+    """
+    return overlap_priority_sum(input, part1=False)
+
+
+day03_soln = AoCSolution(parse, part1, part2)
