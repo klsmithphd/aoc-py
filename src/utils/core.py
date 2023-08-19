@@ -60,14 +60,12 @@ def puzzle_input(path: Path) -> list[str]:
     return [line for line in puzzle_input_iter(path)]
 
 
-def standard_puzzle_input(year: int, day: int) -> list[str]:
+def standard_puzzle_input(year: int, day: int) -> Iterable[str]:
     """ 
-    Load a puzzle input for the given `year` and `day`, assuming that
-    all puzzle inputs are stored in the `inputs` directory, in a 
-    sub-directory per year, and each file is named according to the
-    convention `dayNN-input.txt`
+    Load a puzzle input for the given `year` and `day` from the standard
+    location, returning an iterator over the lines of the input file as strings
     """
-    return puzzle_input(input_path(year, day))
+    return puzzle_input_iter(input_path(year, day))
 
 
 def split_at_blanklines(lines: Iterable[str]) -> Iterable[list[str]]:

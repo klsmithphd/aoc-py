@@ -10,7 +10,7 @@ wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw""".splitlines()
 
-d03_input = standard_puzzle_input(year=2022, day=3)
+d03_input = list(standard_puzzle_input(year=2022, day=3))
 
 
 def test_split_in_half():
