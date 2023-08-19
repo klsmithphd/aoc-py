@@ -1,5 +1,5 @@
 from aoc2022.day03 import split_in_half, chunked_in_thirds, overlap, priority, \
-    overlap_priority_sum, day03_soln
+    overlap_priority_sum, part1, part2
 from utils.core import standard_puzzle_input
 from pipe import map
 
@@ -9,6 +9,8 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw""".splitlines()
+
+d03_input = standard_puzzle_input(year=2022, day=3)
 
 
 def test_split_in_half():
@@ -47,12 +49,9 @@ def test_overlap_priority_sum():
     assert 70 == overlap_priority_sum(d03_sample, part1=False)
 
 
-d03_input = standard_puzzle_input(year=2022, day=3)
-
-
 def test_day03_part1_soln():
-    assert 7597 == day03_soln.part1(d03_input)
+    assert 7597 == part1(d03_input)
 
 
 def test_day03_part2_soln():
-    assert 2607 == day03_soln.part2(d03_input)
+    assert 2607 == part2(d03_input)
