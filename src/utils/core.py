@@ -1,7 +1,6 @@
 """Common utilities for many Advent of Code solutions"""
-
+from collections.abc import Iterable
 from more_itertools import split_at
-from pipe import Pipe
 
 
 class AoCSolution():
@@ -44,7 +43,7 @@ def input_path(year: int, day: int) -> str:
     return f"inputs/{year}/day{day:02}-input.txt"
 
 
-def puzzle_input(filename) -> list[str]:
+def puzzle_input(filename) -> Iterable[str]:
     """ 
     Load a puzzle input from the provided filename, returning a list of the
     lines of the input as strings
@@ -65,7 +64,6 @@ def standard_puzzle_input(year: int, day: int) -> list[str]:
     return puzzle_input(input_path(year, day))
 
 
-@Pipe
 def split_at_blanklines(lines):
     """
     Split a list of items into groups when separated by blank (empty) lines
