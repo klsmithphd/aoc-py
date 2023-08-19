@@ -7,18 +7,30 @@ from pipe import Pipe
 class AoCSolution():
     """Simple wrapper class for Advent of Code solutions"""
 
-    def __init__(self, parse, p1, p2):
-        self.parse = parse
-        self.p1 = p1
-        self.p2 = p2
+    def __init__(self, parse, part1, part2):
+        self.__parse = parse
+        self.__part1 = part1
+        self.__part2 = part2
+
+    def parse(self, input: list[str]):
+        "Parse the raw input into a data structure useful for the puzzle"
+        return self.__parse(input)
 
     def part1(self, input):
         "Return the part1 solution for the day's puzzle, given `input`"
-        return self.p1(self.parse(input))
+        return self.__part1(self.parse(input))
+
+    def part1_doc(self):
+        "Return the description of the solution for part1"
+        return self.__part1.__doc__
 
     def part2(self, input):
         "Return the part2 solution for the day's puzzle, given `input`"
-        return self.p2(self.parse(input))
+        return self.__part2(self.parse(input))
+
+    def part2_doc(self):
+        "Return the description of the solution for part2"
+        return self.__part2.__doc__
 
 
 def input_path(year: int, day: int) -> str:

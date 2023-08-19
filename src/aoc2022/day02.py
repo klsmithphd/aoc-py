@@ -1,5 +1,4 @@
 """ Solution to https://adventofcode.com/2022/day/2"""
-from functools import partial
 from pipe import map, filter
 from utils.core import AoCSolution
 
@@ -112,13 +111,21 @@ def total_score(input, interpret):
 
 # Puzzle solutions
 
-day02_soln = \
-    AoCSolution(
-        parse,
-        # What would your total score be if everything goes exactly
-        # according to your strategy guide?
-        p1=partial(total_score, interpret=interpret1),
-        # Following the Elf's instructions for the second column, what would
-        # your total score be if everything goes exactly according to your
-        # strategy guide?
-        p2=partial(total_score, interpret=interpret2))
+def part1(input):
+    """
+    What would your total score be if everything goes exactly
+    according to your strategy guide?
+    """
+    return total_score(input, interpret1)
+
+
+def part2(input):
+    """
+    Following the Elf's instructions for the second column, what would
+    your total score be if everything goes exactly according to your
+    strategy guide?
+    """
+    return total_score(input, interpret2)
+
+
+day02_soln = AoCSolution(parse, part1, part2)

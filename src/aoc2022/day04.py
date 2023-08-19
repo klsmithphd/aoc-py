@@ -1,5 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/4"""
-from pipe import map, filter
+from pipe import map
 from utils.core import AoCSolution
 
 # Input parsing
@@ -54,7 +54,6 @@ def isoverlapping(i1, i2):
 
 def fully_contained_count(input):
     return sum(1 for x in input if isfully_contained(*x))
-    # return len(list(input | filter(lambda row: isfully_contained(*row))))
 
 
 def overlapping_count(input):
@@ -63,7 +62,18 @@ def overlapping_count(input):
 # Puzzle solutions
 
 
-day04_soln = \
-    AoCSolution(parse,
-                p1=fully_contained_count,
-                p2=overlapping_count)
+def part1(input):
+    """
+    In how many assignment pairs does one range fully contain the other?
+    """
+    return fully_contained_count(input)
+
+
+def part2(input):
+    """
+    In how many assignment pairs do the ranges overlap?
+    """
+    return overlapping_count(input)
+
+
+day04_soln = AoCSolution(parse, part1, part2)

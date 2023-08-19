@@ -1,5 +1,4 @@
 """ Solution to https://adventofcode.com/2022/day/1 """
-from functools import partial
 from pipe import Pipe, map, sort, take
 from utils.core import AoCSolution, split_at_blanklines
 
@@ -33,12 +32,20 @@ def top_n_capacity_sum(calories, n):
 # Puzzle solutions
 
 
-day01_soln = \
-    AoCSolution(
-        parse,
-        # Find the Elf carrying the most Calories.
-        # How many total Calories is that Elf carrying?
-        p1=partial(top_n_capacity_sum, n=1),
-        # Find the top three Elves carrying the most Calories.
-        # How many Calories are those Elves carrying in total?
-        p2=partial(top_n_capacity_sum, n=3))
+def part1(input: list[list[int]]) -> int:
+    """
+    Find the Elf carrying the most Calories.
+    How many total Calories is that Elf carrying?
+    """
+    return top_n_capacity_sum(input, n=1)
+
+
+def part2(input: list[list[int]]) -> int:
+    """
+    Find the top three Elves carrying the most Calories.
+    How many Calories are those Elves carrying in total?
+    """
+    return top_n_capacity_sum(input, n=3)
+
+
+day01_soln = AoCSolution(parse, part1, part2)
