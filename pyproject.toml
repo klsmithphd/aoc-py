@@ -11,6 +11,7 @@ requires-python = ">=3.10"
 dependencies = [
     "pipe>=2.0",
     "more-itertools>=10.1.0",
+    "parse>=1.19.1",
 ]
 
 [build-system]
