@@ -1,5 +1,5 @@
-from aoc2022.day02 import parse, interpret1, interpret2, fill_in, \
-    round_score, total_score, part1, part2
+from aoc2022.day02 import parse, part1, part2, interpret1, interpret2, \
+    fill_in, round_score, total_score
 from utils.core import standard_puzzle_input
 from pipe import map
 

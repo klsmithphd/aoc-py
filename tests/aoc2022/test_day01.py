@@ -1,5 +1,5 @@
+from aoc2022.day01 import parse, part1, part2, top_n_capacity_sum
 from utils.core import standard_puzzle_input
-from aoc2022.day01 import parse, top_n_capacity_sum, part1, part2
 
 d01_s01_raw = """1000
 2000

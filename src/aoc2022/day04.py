@@ -15,7 +15,7 @@ def parse_line(line):
 
 
 def parse(input):
-    return input | map(parse_line)
+    return [parse_line(line) for line in input]
 
 # Puzzle logic
 
