@@ -16,8 +16,8 @@ d01_s01_raw = """1000
 
 10000""".splitlines()
 
-d01_s01 = list(parse(d01_s01_raw))
-d01_input = list(parse(standard_puzzle_input(year=2022, day=1)))
+d01_s01 = parse(d01_s01_raw)
+d01_input = parse(standard_puzzle_input(year=2022, day=1))
 
 
 def test_parse():

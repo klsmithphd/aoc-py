@@ -10,8 +10,8 @@ def parse_chunk(chunk: Iterable[str]) -> list[int]:
     return [int(x) for x in chunk]
 
 
-def parse(input: Iterable[str]) -> Iterable[list[int]]:
-    return (parse_chunk(x) for x in split_at_blanklines(input))
+def parse(input: Iterable[str]) -> list[list[int]]:
+    return [parse_chunk(x) for x in split_at_blanklines(input)]
 
 # Puzzle logic
 
