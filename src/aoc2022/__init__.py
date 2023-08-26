@@ -1,13 +1,17 @@
 from aoc2022.day01 import day01_soln
 from aoc2022.day02 import day02_soln
+from aoc2022.day03 import day03_soln
+from aoc2022.day04 import day04_soln
+from aoc2022.day05 import day05_soln
+from aoc2022.day06 import day06_soln
 
 solutions = {
     1:  day01_soln,
     2:  day02_soln,
-    # 3:  [day03_part1, day03_part2],
-    # 4:  [day04_part1, day04_part2],
-    # 5:  [day05_part1, day05_part2],
-    # 6:  [day06_part1, day06_part2],
+    3:  day03_soln,
+    4:  day04_soln,
+    5:  day05_soln,
+    6:  day06_soln,
     # 7:  [day07_part1, day07_part2],
     # 8:  [day08_part1, day08_part2],
     # 9:  [day09_part1, day09_part2],
