@@ -1,5 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/5"""
-from functools import reduce
+from functools import reduce, partial
 from itertools import zip_longest
 from utils.core import AoCSolution, split_at_blanklines
 from pipe import Pipe, islice, map, reverse, skip, take_while
@@ -48,10 +48,14 @@ def parse_input(input):
 #     return stacks
 
 
-def step(stacks, move):
+def step(stacks, move, one_at_a_time=True):
     qty, src, dst = move
-    popped = list(reversed(stacks[src][-qty:]))
+    to_move = stacks[src][-qty:]
+    popped = list(reversed(to_move)) if one_at_a_time else to_move
     return {**stacks, src: stacks[src][:-qty], dst: stacks[dst]+popped}
+
+
+part2_step = partial(step, one_at_a_time=False)
 
 
 def stack_tops(stacks):
@@ -61,12 +65,25 @@ def stack_tops(stacks):
 # Puzzle solutions
 
 def part1(input):
+    """
+    After the rearrangement procedure completes, what crate ends up on top 
+    of each stack?
+    """
     stacks = input['stacks']
     moves = input['moves']
     final_stacks = reduce(step, moves, stacks)
     return stack_tops(final_stacks)
 
-# day05_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+
+def part2(input):
+    """
+    After the rearrangement procedure completes, what crate ends up on top 
+    of each stack?
+    """
+    stacks = input['stacks']
+    moves = input['moves']
+    final_stacks = reduce(part2_step, moves, stacks)
+    return stack_tops(final_stacks)
+
+
+day05_soln = AoCSolution(parse_input, part1, part2)
