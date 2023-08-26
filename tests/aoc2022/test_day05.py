@@ -1,4 +1,5 @@
-from aoc2022.day05 import parse_input, part1, part2, step, stack_tops
+from aoc2022.day05 import parse, part1, part2, step, stack_tops, \
+    stack_tops_after_steps
 from utils.core import standard_puzzle_input
 
 d05_s01_raw = """    [D]    
@@ -11,21 +12,21 @@ move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2""".splitlines()
 
-d05_s01 = parse_input(d05_s01_raw)
-d05_input = parse_input(standard_puzzle_input(year=2022, day=5))
+d05_s01 = parse(d05_s01_raw)
+d05_input = parse(standard_puzzle_input(year=2022, day=5))
 
 
-def test_parse_input():
-    assert d05_s01 == {"stacks": {1: ['Z', 'N'],
-                                  2: ['M', 'C', 'D'],
-                                  3: ['P']},
-                       "moves": [(1, 2, 1),
-                                 (3, 1, 3),
-                                 (2, 2, 1),
-                                 (1, 1, 2)]}
+def test_parse():
+    assert d05_s01 == ({1: ['Z', 'N'],
+                        2: ['M', 'C', 'D'],
+                        3: ['P']},
+                       [(1, 2, 1),
+                        (3, 1, 3),
+                        (2, 2, 1),
+                        (1, 1, 2)])
 
 
-d05_s01_part1_step0 = d05_s01['stacks']
+d05_s01_part1_step0 = d05_s01.stacks
 d05_s01_part1_step1 = {1: ['Z', 'N', 'D'],
                        2: ['M', 'C'],
                        3: ['P']}
@@ -67,17 +68,14 @@ def test_stack_tops():
     assert 'MCD' == stack_tops(d05_s01_part2_step4)
 
 
+def test_stack_tops_after_steps():
+    assert 'CMZ' == stack_tops_after_steps(d05_s01)
+    assert 'MCD' == stack_tops_after_steps(d05_s01, part1=False)
+
+
 def test_day05_part1_soln():
     assert 'CNSZFDVLJ' == part1(d05_input)
 
 
 def test_day05_part2_soln():
     assert 'QNDWLMGNS' == part2(d05_input)
-
-
-# def test_day05_part1_soln():
-#     assert 1 == day05_soln.part1(d05_input)
-
-
-# def test_day05_part2_soln():
-#     assert 1 == day05_soln.part2(d05_input)

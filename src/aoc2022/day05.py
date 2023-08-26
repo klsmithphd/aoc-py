@@ -1,65 +1,64 @@
 """Solution to https://adventofcode.com/2022/day/5"""
+from collections import namedtuple
 from functools import reduce, partial
 from itertools import zip_longest
+from parse import parse as str_parse
+from pipe import Pipe, islice, map
 from utils.core import AoCSolution, split_at_blanklines
-from pipe import Pipe, islice, map, reverse, skip, take_while
-from parse import parse
 
 
 # Input parsing
 
+Move = namedtuple('Move', ['qty', 'src', 'dst'])
+Day05Input = namedtuple('Day05Input', ['stacks', 'moves'])
+
 
 def parse_stack(stack):
-    crates = list(stack | take_while(lambda x: x != ' ') | skip(1))
-    return crates
+    return [x for x in stack if x and str.isalpha(x)]
 
 
 def parse_stacks(stacks):
-    # return {1: ["Z", "N"],
-    #         2: ["M", "C", "D"],
-    #         3: ["P"]}
-
-    crate_stacks = list(zip_longest(*reversed(stacks), fillvalue=' ') |
-                        islice(1, None, 4) |
-                        map(parse_stack))
-    return dict(zip(range(1, len(crate_stacks)+1), crate_stacks))
+    crate_stacks = list(zip_longest(*reversed(stacks)) |  # transpose rows/cols
+                        islice(1, None, 4) |  # only the cols with "crates"
+                        map(parse_stack))  # convert chars into lists
+    n = len(crate_stacks)+1
+    return dict(zip(range(1, n), crate_stacks))
 
 
 def parse_move(move):
-    return parse("move {:d} from {:d} to {:d}", move).fixed
+    values = str_parse("move {:d} from {:d} to {:d}", move).fixed
+    return Move(*values)
 
 
 def parse_moves(moves):
     return [parse_move(move) for move in moves]
 
 
-def parse_input(input):
+def parse(input):
     stacks, moves = split_at_blanklines(input)
-    return {"stacks": parse_stacks(stacks),
-            "moves": parse_moves(moves)}
+    return Day05Input(parse_stacks(stacks), parse_moves(moves))
 
 # Puzzle logic
-
-# Imperative style
-# def move(stacks, move):
-#     qty, src, dst = move
-#     for i in range(qty):
-#         stacks[dst].append(stacks[src].pop())
-#     return stacks
 
 
 def step(stacks, move, one_at_a_time=True):
     qty, src, dst = move
     to_move = stacks[src][-qty:]
     popped = list(reversed(to_move)) if one_at_a_time else to_move
-    return {**stacks, src: stacks[src][:-qty], dst: stacks[dst]+popped}
-
-
-part2_step = partial(step, one_at_a_time=False)
+    return {**stacks,
+            src: stacks[src][:-qty],
+            dst: stacks[dst]+popped}
 
 
 def stack_tops(stacks):
-    return ''.join(stacks.values() | map(lambda s: s[-1]))
+    return ''.join(s[-1] for s in stacks.values())
+
+
+def stack_tops_after_steps(input, part1=True):
+    stacks, moves = input
+    step_fn = step if part1 else partial(step, one_at_a_time=False)
+    final_stacks = reduce(step_fn, moves, stacks)
+    return stack_tops(final_stacks)
 
 
 # Puzzle solutions
@@ -69,10 +68,7 @@ def part1(input):
     After the rearrangement procedure completes, what crate ends up on top 
     of each stack?
     """
-    stacks = input['stacks']
-    moves = input['moves']
-    final_stacks = reduce(step, moves, stacks)
-    return stack_tops(final_stacks)
+    return stack_tops_after_steps(input, part1=True)
 
 
 def part2(input):
@@ -80,10 +76,7 @@ def part2(input):
     After the rearrangement procedure completes, what crate ends up on top 
     of each stack?
     """
-    stacks = input['stacks']
-    moves = input['moves']
-    final_stacks = reduce(part2_step, moves, stacks)
-    return stack_tops(final_stacks)
+    return stack_tops_after_steps(input, part1=False)
 
 
-day05_soln = AoCSolution(parse_input, part1, part2)
+day05_soln = AoCSolution(parse, part1, part2)
