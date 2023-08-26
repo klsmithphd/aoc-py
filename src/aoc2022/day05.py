@@ -1,7 +1,7 @@
 """Solution to https://adventofcode.com/2022/day/5"""
 from itertools import zip_longest
 from utils.core import AoCSolution, split_at_blanklines
-from pipe import Pipe, islice, map, reverse, skip, skip_while
+from pipe import Pipe, islice, map, reverse, skip, take_while
 from parse import parse
 
 
@@ -9,8 +9,7 @@ from parse import parse
 
 
 def parse_stack(stack):
-    crates = list(
-        reversed(list(stack | skip_while(lambda x: x == ' '))) | skip(1))
+    crates = list(stack | take_while(lambda x: x != ' ') | skip(1))
     return crates
 
 
@@ -19,7 +18,7 @@ def parse_stacks(stacks):
     #         2: ["M", "C", "D"],
     #         3: ["P"]}
 
-    crate_stacks = list(zip_longest(*stacks, fillvalue=' ') |
+    crate_stacks = list(zip_longest(*reversed(stacks), fillvalue=' ') |
                         islice(1, None, 4) |
                         map(parse_stack))
     return dict(zip(range(1, len(crate_stacks)+1), crate_stacks))
