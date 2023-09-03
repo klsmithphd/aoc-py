@@ -1,12 +1,15 @@
 """Solution to https://adventofcode.com/2022/day/7"""
 from functools import cache, reduce
 from more_itertools import flatten, split_before
-from toolz import assoc_in, get_in
-# from utils.core import AoCSolution
+from toolz import assoc_in, get_in, first
+from utils.core import AoCSolution
+
+# Constants
+TOTAL_DISK_SPACE = 70000000
+NEEDED_UNUSED_SPACE = 30000000
+
 
 # Input parsing
-
-
 def change_dir(state, dir):
     """
     Update `state` to reflect directory change
@@ -61,7 +64,6 @@ def parse(input):
 
 
 # Puzzle logic
-
 def dir_paths(tree, path=[]):
     """
     Returns a sequence of all the paths (nested key sequences) to the
@@ -116,18 +118,52 @@ class MemoizedTreeSizer:
             sum(self.size(*path, k) for k in contents)
 
 
+def dir_sizes(tree):
+    """
+    Return a sequence of all of the sizes of all directories
+    """
+    sizer = MemoizedTreeSizer(tree)
+    return (sizer.size(*path) for path in dir_paths(tree))
+
+
 def dir_total_below_100k(tree):
+    """
+    Return the sum of the sizes of all directories that are smaller
+    than 100k bytes
+    """
+    sizes = dir_sizes(tree)
+    return sum(x for x in sizes if x <= 100000)
+
+
+def smallest_dir_size_to_remove(tree):
+    """
+    Find the size of the single smallest directory that could be deleted
+    to free up enough unused space on the filesystem to perform an upgrade
+    """
     sizer = MemoizedTreeSizer(tree)
     sizes = (sizer.size(*path) for path in dir_paths(tree))
-    return sum(size for size in sizes if size <= 100000)
+    used_size = sizer.size('/')
+    cleanup_size = used_size + NEEDED_UNUSED_SPACE - TOTAL_DISK_SPACE
+    return first(sorted(x for x in sizes if x >= cleanup_size))
 
 
 # Puzzle solutions
 
 def part1(input):
+    """
+    Find all of the directories with a total size of at most 100000. What is 
+    the sum of the total sizes of those directories?
+    """
     return dir_total_below_100k(input)
 
-# day07_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+
+def part2(input):
+    """
+    Find the smallest directory that, if deleted, would free up enough space 
+    on the filesystem to run the update. What is the total size of that 
+    directory?
+    """
+    return smallest_dir_size_to_remove(input)
+
+
+day07_soln = AoCSolution(parse, part1, part2)
