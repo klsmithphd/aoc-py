@@ -1,4 +1,4 @@
-from aoc2022.day07 import parse, change_dir, list_dir, dir_paths
+from aoc2022.day07 import parse, change_dir, list_dir, dir_paths, node_size
 from utils.core import standard_puzzle_input
 
 d07_s01_raw = """$ cd /
@@ -71,6 +71,13 @@ def test_dir_paths():
     assert [['/'], ['/', 'a'], ['/', 'a', 'e'],
             ['/', 'd']] == list(dir_paths(d07_s01))
 
+
+def test_node_size():
+    assert 584 == node_size(d07_s01, ['/', 'a', 'e', 'i'])
+    assert 584 == node_size(d07_s01, ['/', 'a', 'e'])
+    assert 94853 == node_size(d07_s01, ['/', 'a'])
+    assert 24933642 == node_size(d07_s01, ['/', 'd'])
+    assert 48381165 == node_size(d07_s01, ['/'])
 
 # d03_input = standard_puzzle_input(year=2022, day=7)
 

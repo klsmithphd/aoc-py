@@ -1,7 +1,7 @@
 """Solution to https://adventofcode.com/2022/day/7"""
 from functools import reduce
 from more_itertools import flatten, split_before
-from toolz import assoc_in, concatv
+from toolz import assoc_in, get_in
 # from utils.core import AoCSolution
 
 # Input parsing
@@ -81,6 +81,18 @@ def dir_paths_alt(tree, path=[]):
     """
     return list(flatten([path+[k]] + dir_paths_alt(v, path+[k])
                         for k, v in tree.items() if type(v) is dict))
+
+
+def node_size(tree, path):
+    """
+    Find the size of the node in the `tree` at location given by `path`.
+    If the node represents a file, returns the size of the file. 
+    If the node represents a directory, returns the sum of the size of all
+    descendent nodes.
+    """
+    contents = get_in(path, tree)
+    return contents if type(contents) is int else \
+        sum(node_size(tree, path+[k]) for k in contents)
 
 
 # Puzzle solutions
