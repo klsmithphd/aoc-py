@@ -1,4 +1,4 @@
-from aoc2022.day07 import parse
+from aoc2022.day07 import parse, change_dir, list_dir, dir_paths
 from utils.core import standard_puzzle_input
 
 d07_s01_raw = """$ cd /
@@ -29,20 +29,47 @@ d07_s01 = {"/":
            {"a":
             {"e":
              {"i": 584},
-                "f": 29116,
-                "g": 2557,
-                "h.lst": 62596},
-               "b.txt": 14848514,
-               "c.dat": 8504156,
-               "d":
-               {"j": 4060174,
-                "d.log": 8033020,
-                "d.ext": 5626152,
-                "k": 7214296}}}
+             "f": 29116,
+             "g": 2557,
+             "h.lst": 62596
+             },
+            "b.txt": 14848514,
+            "c.dat": 8504156,
+            "d":
+            {"j": 4060174,
+             "d.log": 8033020,
+             "d.ext": 5626152,
+             "k": 7214296}
+            }
+           }
+
+
+def test_change_dir():
+    # Going into a directory updates the tree and appends the dir to the path
+    assert {'tree': {'/': {}}, 'path': ['/']} == \
+        change_dir({'tree': {}, 'path': []}, '/')
+    # Going into a directory updates the tree and appends the dir to the path
+    assert {'tree': {'/': {'a': {}}}, 'path': ['/', 'a']} == \
+        change_dir({'tree': {'/': {}}, 'path': ['/']}, 'a')
+    # Going to the parent directory leaves the tree the same and drops a dir
+    # from the path
+    assert {'tree': {'/': {'a': {}}}, 'path': ['/']} == \
+        change_dir({'tree': {'/': {'a': {}}}, 'path': ['/', 'a']}, '..')
+
+
+def test_list_dir():
+    assert {'tree': {'/': {'a': {}, 'b': 12}}, 'path': ['/']} == \
+        list_dir({'tree': {'/': {}}, 'path': ['/']},
+                 ['dir a', '12 b'])
 
 
 def test_parse():
     assert d07_s01 == parse(d07_s01_raw)
+
+
+def test_dir_paths():
+    assert [['/'], ['/', 'a'], ['/', 'a', 'e'],
+            ['/', 'd']] == list(dir_paths(d07_s01))
 
 
 # d03_input = standard_puzzle_input(year=2022, day=7)
