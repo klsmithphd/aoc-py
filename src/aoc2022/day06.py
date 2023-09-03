@@ -8,6 +8,7 @@ from utils.core import AoCSolution
 def parse(input):
     return first(input)
 
+
 # Puzzle logic
 
 
@@ -18,10 +19,10 @@ def chars_to_distinct_run(len, s):
     """
     windows = enumerate(sliding_window(len, s))
     return len + first(x[0] for x in windows if isdistinct(x[1]))
-    # return list(map(isdistinct, sliding_window(len, s))).index(True)+len
 
 
 # Puzzle solutions
+
 
 def part1(input):
     """
