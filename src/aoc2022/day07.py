@@ -1,5 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/7"""
-from functools import reduce
+from functools import cache, reduce
 from more_itertools import flatten, split_before
 from toolz import assoc_in, get_in
 # from utils.core import AoCSolution
@@ -93,6 +93,27 @@ def node_size(tree, path):
     contents = get_in(path, tree)
     return contents if type(contents) is int else \
         sum(node_size(tree, path+[k]) for k in contents)
+
+
+class MemoizedTreeSizer:
+    """
+    A memoized (cached) version of the `node_size` function.
+    Python dicts are mutable, so they don't implement a hash function.
+    All of the function arguments need to be hashable for the `@cache`
+    decorator to work.
+
+    This class closes over the `tree` argument and changes the signature
+    to accept the path spread as args
+    """
+
+    def __init__(self, tree):
+        self.tree = tree
+
+    @cache
+    def size(self, *path):
+        contents = get_in(path, self.tree)
+        return contents if type(contents) is int else \
+            sum(self.size(*path, k) for k in contents)
 
 
 # Puzzle solutions

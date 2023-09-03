@@ -1,4 +1,4 @@
-from aoc2022.day07 import parse, change_dir, list_dir, dir_paths, node_size
+from aoc2022.day07 import parse, change_dir, list_dir, dir_paths, node_size, MemoizedTreeSizer
 from utils.core import standard_puzzle_input
 
 d07_s01_raw = """$ cd /
@@ -78,6 +78,15 @@ def test_node_size():
     assert 94853 == node_size(d07_s01, ['/', 'a'])
     assert 24933642 == node_size(d07_s01, ['/', 'd'])
     assert 48381165 == node_size(d07_s01, ['/'])
+
+
+def test_MemoizedTreeSizer_size():
+    sizer = MemoizedTreeSizer(d07_s01)
+    assert 584 == sizer.size('/', 'a', 'e', 'i')
+    assert 584 == sizer.size('/', 'a', 'e')
+    assert 94853 == sizer.size('/', 'a')
+    assert 24933642 == sizer.size('/', 'd')
+    assert 48381165 == sizer.size('/')
 
 # d03_input = standard_puzzle_input(year=2022, day=7)
 
