@@ -116,7 +116,16 @@ class MemoizedTreeSizer:
             sum(self.size(*path, k) for k in contents)
 
 
+def dir_total_below_100k(tree):
+    sizer = MemoizedTreeSizer(tree)
+    sizes = (sizer.size(*path) for path in dir_paths(tree))
+    return sum(size for size in sizes if size <= 100000)
+
+
 # Puzzle solutions
+
+def part1(input):
+    return dir_total_below_100k(input)
 
 # day07_soln = \
 #     AoCSolution(parse,
