@@ -1,7 +1,7 @@
 """Solution to https://adventofcode.com/2022/day/8"""
-# from utils.core import AoCSolution
+from itertools import takewhile
 from more_itertools import flatten
-
+from utils.core import AoCSolution
 
 # Input parsing
 
@@ -46,12 +46,40 @@ def trees_visible_count(grid):
                    flatten(transpose(trees_visible_horiz(transpose(grid))))))
 
 
+def tree_distance(row, i):
+    t = row[i]
+    l = [] if i == 0 else row[i-1::-1]
+    r = row[i+1:]
+    return (min(len(l), 1+sum(1 for _ in takewhile(lambda x: x < t, l))),
+            min(len(r), 1+sum(1 for _ in takewhile(lambda x: x < t, r))))
+
+
+def tree_distance_in_row(row):
+    return [tree_distance(row, i) for i in range(len(row))]
+
+
+def tree_distance_horiz(grid):
+    return [tree_distance_in_row(row) for row in grid]
+
+
+def scenic_scores(grid):
+    return map(lambda a, b: a[0]*a[1]*b[0]*b[1],
+               flatten(tree_distance_horiz(grid)),
+               flatten(transpose(tree_distance_horiz(transpose(grid)))))
+
+
+def max_scenic_score(grid):
+    return max(scenic_scores(grid))
+
+
 # Puzzle solutions
 
 def part1(input):
     return trees_visible_count(input)
 
-# day08_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+
+def part2(input):
+    return max_scenic_score(input)
+
+
+day08_soln = AoCSolution(parse, part1, part2)
