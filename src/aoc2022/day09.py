@@ -83,6 +83,15 @@ def part1(input):
     """
     return unique_tail_pos_count(input, 2)
 
+
+def part2(input):
+    """
+    Simulate your complete series of motions on a larger rope with ten knots. 
+    How many positions does the tail of the rope visit at least once?
+    """
+    return unique_tail_pos_count(input, 10)
+
+
 # day09_soln = \
 #     AoCSolution(parse,
 #                 p1=
