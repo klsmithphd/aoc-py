@@ -62,15 +62,15 @@ def step(chain, cmd):
     return list(accumulate(chain[1:], move_tail, initial=newhead))
 
 
-def all_moves(cmds, chain_len=2):
+def all_moves(cmds, chain_len):
     return accumulate(cmds, step, initial=list(repeat((0, 0), chain_len)))
 
 
-def unique_tail_positions(cmds, chain_len=2):
+def unique_tail_positions(cmds, chain_len):
     return set(x[-1] for x in all_moves(cmds, chain_len))
 
 
-def unique_tail_pos_count(cmds, chain_len=2):
+def unique_tail_pos_count(cmds, chain_len):
     return len(unique_tail_positions(cmds, chain_len))
 
 

@@ -54,17 +54,17 @@ def test_step():
 
 
 def test_all_moves():
-    assert [(2, 2), (1, 2)] == last(all_moves(d09_s01))
+    assert [(2, 2), (1, 2)] == last(all_moves(d09_s01, 2))
 
 
 def test_unique_tail_positions():
     assert {(0, 0), (1, 0), (2, 0), (3, 0), (4, 1),
             (4, 2), (4, 3), (3, 4), (2, 4), (3, 3),
-            (3, 2), (2, 2), (1, 2)} == unique_tail_positions(d09_s01)
+            (3, 2), (2, 2), (1, 2)} == unique_tail_positions(d09_s01, 2)
 
 
 def test_unique_tail_pos_count():
-    assert 13 == unique_tail_pos_count(d09_s01)
+    assert 13 == unique_tail_pos_count(d09_s01, 2)
 
 
 d09_input = parse(standard_puzzle_input(year=2022, day=9))
