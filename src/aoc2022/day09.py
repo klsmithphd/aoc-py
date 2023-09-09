@@ -2,7 +2,7 @@
 from itertools import accumulate, repeat
 from more_itertools import flatten
 from operator import add, sub
-# from utils.core import AoCSolution
+from utils.core import AoCSolution
 
 # Constants
 
@@ -92,7 +92,4 @@ def part2(input):
     return unique_tail_pos_count(input, 10)
 
 
-# day09_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+day09_soln = AoCSolution(parse, part1, part2)
