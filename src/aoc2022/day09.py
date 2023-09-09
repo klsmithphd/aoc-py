@@ -50,7 +50,7 @@ def tail_delta(tail, head):
         return tmap(cap, diff)
 
 
-def move_tail(tail, head):
+def move_tail(head, tail):
     """
     Update the tail position based on the knot in front of it
     """
@@ -58,9 +58,8 @@ def move_tail(tail, head):
 
 
 def step(chain, cmd):
-    tail, head = chain
-    newhead = tmap(add, head, MOVES[cmd])
-    return [move_tail(tail, newhead), newhead]
+    newhead = tmap(add, chain[0], MOVES[cmd])
+    return list(accumulate(chain[1:], move_tail, initial=newhead))
 
 
 def all_moves(cmds):
@@ -68,7 +67,7 @@ def all_moves(cmds):
 
 
 def unique_tail_positions(cmds):
-    return set(x[0] for x in all_moves(cmds))
+    return set(x[-1] for x in all_moves(cmds))
 
 
 def unique_tail_pos_count(cmds):
