@@ -38,7 +38,7 @@ def cap(num):
     return num // 2 if num % 2 == 0 else num
 
 
-def tail_delta(tail, head):
+def tail_delta(head, tail):
     """
     Compute the amount by which the tail position should change based on the
     new position of the knot in front of it
@@ -54,7 +54,7 @@ def move_tail(head, tail):
     """
     Update the tail position based on the knot in front of it
     """
-    return tmap(add, tail, tail_delta(tail, head))
+    return tmap(add, tail, tail_delta(head, tail))
 
 
 def step(chain, cmd):
