@@ -62,22 +62,26 @@ def step(chain, cmd):
     return list(accumulate(chain[1:], move_tail, initial=newhead))
 
 
-def all_moves(cmds):
-    return accumulate(cmds, step, initial=[(0, 0), (0, 0)])
+def all_moves(cmds, chain_len=2):
+    return accumulate(cmds, step, initial=list(repeat((0, 0), chain_len)))
 
 
-def unique_tail_positions(cmds):
-    return set(x[-1] for x in all_moves(cmds))
+def unique_tail_positions(cmds, chain_len=2):
+    return set(x[-1] for x in all_moves(cmds, chain_len))
 
 
-def unique_tail_pos_count(cmds):
-    return len(unique_tail_positions(cmds))
+def unique_tail_pos_count(cmds, chain_len=2):
+    return len(unique_tail_positions(cmds, chain_len))
 
 
 # Puzzle solutions
 
 def part1(input):
-    return unique_tail_pos_count(input)
+    """
+    Simulate your complete hypothetical series of motions. How many positions 
+    does the tail of the rope visit at least once?
+    """
+    return unique_tail_pos_count(input, 2)
 
 # day09_soln = \
 #     AoCSolution(parse,
