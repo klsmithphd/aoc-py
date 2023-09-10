@@ -22,14 +22,29 @@ def parse(input):
 
 
 def addends(op):
+    """
+    Returns a list that determines by how much the `X` register should change
+    over the next one or two cycles
+
+    addx V takes two cycles to complete. After two cycles, the X register is 
+    increased by the value V. (V can be negative.)
+
+    noop takes one cycle to complete. It has no other effect.
+    """
     return [0] if op == "noop" else [0, op]
 
 
 def changes(cmds):
+    """
+    Returns a sequence of the changes in the `X` register after each cycle
+    """
     return flatten(addends(cmd) for cmd in cmds)
 
 
 def register_values(input):
+    """
+    Return a sequence of the value of the `X` register at the end of each cycle
+    """
     return accumulate(changes(input), add, initial=1)
 
 
@@ -59,6 +74,8 @@ def light(pixel, register):
 
 def screen(input):
     """
+    Return a string representation of the CRT screen based on the programmed
+    instructions
     """
     lights = map(light, flatten(repeat(range(40), 6)), register_values(input))
     return '\n'.join(map(''.join, chunked(lights, 40)))
