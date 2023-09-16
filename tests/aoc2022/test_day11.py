@@ -1,5 +1,5 @@
-from aoc2022.day11 import parse, part1, Monkey, next_toss, items, turn, round, rounds, \
-    counts, monkey_business
+from aoc2022.day11 import parse, part1, part2, Monkey, next_toss, items, turn, round, rounds, \
+    counts, monkey_business, round_part2, part2_augment, rounds_part2, monkey_business_part2
 from toolz import nth, take
 from utils.core import standard_puzzle_input
 
@@ -114,8 +114,39 @@ def test_counts():
     assert [101, 95, 7, 105] == counts(nth(20, rounds(d11_s01)))
 
 
+def test_counts_part2():
+    d11_s01_part2 = part2_augment(d11_s01)
+    assert [2, 4, 3, 6] == counts(round_part2(d11_s01_part2))
+    assert [99, 97, 8, 103] == counts(nth(20, rounds_part2(d11_s01_part2)))
+    assert [5204, 4792, 199, 5192] == \
+        counts(nth(1000, rounds_part2(d11_s01_part2)))
+    assert [52166, 47830, 1938, 52013] == \
+        counts(nth(10000, rounds_part2(d11_s01_part2)))
+
+
 def test_monkey_business():
     assert 10605 == monkey_business(d11_s01, 20)
+
+
+def test_monkey_business_part2():
+    assert 2713310158 == monkey_business_part2(d11_s01, 10000)
+
+
+def test_part2_augment():
+    assert [[{2: 1, 3: 1, 5: 4, 7: 2, 9: 7, 11: 2, 13: 1, 17: 11, 19: 3, 23: 10},
+             {2: 0, 3: 2, 5: 3, 7: 0, 9: 8, 11: 10, 13: 7, 17: 13, 19: 3, 23: 6}],
+
+            [{2: 0, 3: 0, 5: 4, 7: 5, 9: 0, 11: 10, 13: 2, 17: 3, 19: 16, 23: 8},
+             {2: 1, 3: 2, 5: 0, 7: 2, 9: 2, 11: 10, 13: 0, 17: 14, 19: 8, 23: 19},
+             {2: 1, 3: 0, 5: 0, 7: 5, 9: 3, 11: 9, 13: 10, 17: 7, 19: 18, 23: 6},
+             {2: 0, 3: 2, 5: 4, 7: 4, 9: 2, 11: 8, 13: 9, 17: 6, 19: 17, 23: 5}],
+
+            [{2: 1, 3: 1, 5: 4, 7: 2, 9: 7, 11: 2, 13: 1, 17: 11, 19: 3, 23: 10},
+             {2: 0, 3: 0, 5: 0, 7: 4, 9: 6, 11: 5, 13: 8, 17: 9, 19: 3, 23: 14},
+             {2: 1, 3: 1, 5: 2, 7: 6, 9: 7, 11: 9, 13: 6, 17: 12, 19: 2, 23: 5}],
+
+            [{2: 0, 3: 2, 5: 4, 7: 4, 9: 2, 11: 8, 13: 9, 17: 6, 19: 17, 23: 5}]] == \
+        items(part2_augment(d11_s01))
 
 
 d11_input = parse(standard_puzzle_input(year=2022, day=11))
@@ -125,5 +156,5 @@ def test_day11_part1_soln():
     assert 112221 == part1(d11_input)
 
 
-# # def test_day11_part2_soln():
-# #     assert 1 == day11_soln.part2(d11_input)
+def test_day11_part2_soln():
+    assert 25272176808 == part2(d11_input)
