@@ -8,6 +8,7 @@ from utils.core import AoCSolution, split_at_blanklines
 # Input parsing
 
 Monkey = namedtuple('Monkey', ['operation', 'divisor', 't_dest', 'f_dest'])
+State = namedtuple('State', ['monkeys', 'items'])
 
 L2_START = len("  Starting items: ")
 L3_START = len("  Operation: new = ")
@@ -34,10 +35,8 @@ def parse_monkey(monkey_spec):
 
 def parse(input):
     monkey_data = [parse_monkey(x) for x in split_at_blanklines(input)]
-    return {
-        'monkeys': [monkey[0] for monkey in monkey_data],
-        'items':   [monkey[1] for monkey in monkey_data]
-    }
+    return State(monkeys=[monkey[0] for monkey in monkey_data],
+                 items=[monkey[1] for monkey in monkey_data])
 
 # Puzzle logic
 
@@ -97,6 +96,10 @@ def turn(monkeys, monkey_turn):
 def round(monkeys, items):
     return first(drop(len(monkeys),
                       iterate(partial(turn, monkeys), (0, items))))[1]
+
+
+def rounds(monkeys, items):
+    return iterate(partial(round, monkeys), items)
 
 # Puzzle solutions
 
