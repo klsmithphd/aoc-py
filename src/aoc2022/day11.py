@@ -1,14 +1,19 @@
 """Solution to https://adventofcode.com/2022/day/11"""
 from collections import defaultdict, namedtuple
-from functools import partial
-from itertools import takewhile
-from toolz import drop, first, iterate
+from functools import partial, reduce
+from itertools import accumulate, takewhile
+from operator import add
+from toolz import drop, first, iterate, nth, take
 from utils.core import AoCSolution, split_at_blanklines
 
 # Input parsing
 
-Monkey = namedtuple('Monkey', ['operation', 'divisor', 't_dest', 'f_dest'])
-State = namedtuple('State', ['monkeys', 'items'])
+Monkey = namedtuple('Monkey', ['operation',
+                               'divisor',
+                               't_dest',
+                               'f_dest',
+                               'counts',
+                               'items'])
 
 L2_START = len("  Starting items: ")
 L3_START = len("  Operation: new = ")
@@ -24,21 +29,28 @@ def parse_operation(opstr):
 
 def parse_monkey(monkey_spec):
     _, l2, l3, l4, l5, l6 = monkey_spec
-    return (Monkey(
-        parse_operation(l3[L3_START:]),
-        int(l4[L4_START:]),
-        int(l5[L5_START:]),
-        int(l6[L6_START:])
-    ),
-        [int(item) for item in l2[L2_START:].split(", ")])
+    return Monkey(
+        operation=parse_operation(l3[L3_START:]),
+        divisor=int(l4[L4_START:]),
+        t_dest=int(l5[L5_START:]),
+        f_dest=int(l6[L6_START:]),
+        counts=0,
+        items=[int(item) for item in l2[L2_START:].split(", ")]
+    )
 
 
 def parse(input):
-    monkey_data = [parse_monkey(x) for x in split_at_blanklines(input)]
-    return State(monkeys=[monkey[0] for monkey in monkey_data],
-                 items=[monkey[1] for monkey in monkey_data])
+    return [parse_monkey(x) for x in split_at_blanklines(input)]
 
 # Puzzle logic
+
+
+def items(monkeys):
+    return [monkey.items for monkey in monkeys]
+
+
+def counts(monkeys):
+    return [monkey.counts for monkey in monkeys]
 
 
 def dict_of_lists(tuples):
@@ -64,44 +76,45 @@ def division_test(worry, divisor):
     return worry % divisor == 0
 
 
-def next_toss(monkey, item):
-    operation, divisor, t_dest, f_dest = monkey
+def next_toss(id, monkeys):
+    monkey = monkeys[id]
+    operation, divisor, t_dest, f_dest, counts, items = monkey
+    item = items[0]
     wry = worry(operation, item)
     divides = division_test(wry, divisor)
     dest = t_dest if divides else f_dest
-    return (dest, wry)
+    new_monkeys = [x for x in monkeys]
+    new_monkeys[id] = monkey._replace(items=items[1:],
+                                      counts=counts+1)
+    new_monkeys[dest] = \
+        monkeys[dest]._replace(items=monkeys[dest].items + [wry])
+    return new_monkeys
 
 
-def next_tosses(monkey, items):
-    return dict_of_lists(next_toss(monkey, item) for item in items)
+def turn(monkeys, id):
+    next_monkeys = monkeys
+    while len(next_monkeys[id].items) > 0:
+        next_monkeys = next_toss(id, next_monkeys)
+    return next_monkeys
 
 
-# def turn(monkeys, items, monkey_id):
-#     tosses = next_tosses(monkeys[monkey_id], items[monkey_id])
-#     new_items = [items[i] + tosses[i] for i in range(len(items))]
-#     new_items[monkey_id] = []
-#     return new_items
-
-def turn(monkeys, monkey_turn):
-    id, items = monkey_turn
-    try:
-        tosses = next_tosses(monkeys[id], items[id])
-        new_items = [items[i] + tosses[i] for i in range(len(items))]
-        new_items[id] = []
-        return (id+1, new_items)
-    except:
-        raise IndexError
+def round(monkeys):
+    return reduce(turn, range(len(monkeys)), monkeys)
 
 
-def round(monkeys, items):
-    return first(drop(len(monkeys),
-                      iterate(partial(turn, monkeys), (0, items))))[1]
+def rounds(monkeys):
+    return iterate(round, monkeys)
 
 
-def rounds(monkeys, items):
-    return iterate(partial(round, monkeys), items)
+def monkey_business(monkeys, n):
+    a, b = take(2, sorted(counts(nth(n, rounds(monkeys))), reverse=True))
+    return a * b
+
 
 # Puzzle solutions
+
+def part1(input):
+    return monkey_business(input, 20)
 
 # day11_soln = \
 #     AoCSolution(parse,
