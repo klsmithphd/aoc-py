@@ -1,6 +1,7 @@
-from aoc2022.day11 import parse, part1, part2, Monkey, next_toss, items, turn, round, rounds, \
-    counts, monkey_business, round_part2, part2_augment, rounds_part2, monkey_business_part2
-from toolz import nth, take
+from aoc2022.day11 import parse, part1, part2, Monkey,\
+    items, turn, counts, round_1, round_2, rounds_1, rounds_2, \
+    monkey_business, part2_augment
+from toolz import nth
 from utils.core import standard_puzzle_input
 
 d11_s01_raw = """Monkey 0:
@@ -32,13 +33,13 @@ Monkey 3:
     If false: throw to monkey 1""".splitlines()
 
 d11_s01 = [
-    Monkey(operation=['*',   19], divisor=23, t_dest=2, f_dest=3, counts=0,
+    Monkey(operation=('*',   19), divisor=23, t_dest=2, f_dest=3, counts=0,
            items=[79, 98]),
-    Monkey(operation=['+',    6], divisor=19, t_dest=2, f_dest=0, counts=0,
+    Monkey(operation=('+',    6), divisor=19, t_dest=2, f_dest=0, counts=0,
            items=[54, 65, 75, 74]),
-    Monkey(operation=['*', None], divisor=13, t_dest=1, f_dest=3, counts=0,
+    Monkey(operation=('*', None), divisor=13, t_dest=1, f_dest=3, counts=0,
            items=[79, 60, 97]),
-    Monkey(operation=['+',    3], divisor=17, t_dest=0, f_dest=1, counts=0,
+    Monkey(operation=('+',    3), divisor=17, t_dest=0, f_dest=1, counts=0,
            items=[74])
 ]
 
@@ -48,88 +49,69 @@ def test_parse():
 
 
 def test_turn():
-    assert [[],
-            [54, 65, 75, 74],
-            [79, 60, 97],
-            [74, 500, 620]] == items(turn(d11_s01, 0))
-    # assert [[20, 23, 27, 26],
-    #         [],
-    #         [79, 60, 97],
-    #         [74, 500, 620]] == \
-    #     turn(d11_s01.monkeys,
-    #          (1,
-    #           [[],
-    #            [54, 65, 75, 74],
-    #               [79, 60, 97],
-    #               [74, 500, 620]]))
-#     assert (3,
-#             [[20, 23, 27, 26],
-#              [2080],
-#              [],
-#              [74, 500, 620, 1200, 3136]]) == \
-#         turn(d11_s01.monkeys,
-#              (2,
-#               [[20, 23, 27, 26],
-#                [],
-#                   [79, 60, 97],
-#                   [74, 500, 620]]))
-#     assert (4,
-#             [[20, 23, 27, 26],
-#              [2080, 25, 167, 207, 401, 1046],
-#              [],
-#              []]) == \
-#         turn(d11_s01.monkeys,
-#              (3,
-#               [[20, 23, 27, 26],
-#                [2080],
-#                   [],
-#                   [74, 500, 620, 1200, 3136]]))
+    items_after_monkey_0 = [[],
+                            [54, 65, 75, 74],
+                            [79, 60, 97],
+                            [74, 500, 620]]
+    assert items_after_monkey_0 == items(turn(1, d11_s01, 0))
+
+    items_after_monkey_1 = [[20, 23, 27, 26],
+                            [],
+                            [79, 60, 97],
+                            [74, 500, 620]]
+    assert items_after_monkey_1 == items(turn(1, turn(1, d11_s01, 0), 1))
+
+    items_after_monkey_2 = [[20, 23, 27, 26],
+                            [2080],
+                            [],
+                            [74, 500, 620, 1200, 3136]]
+    assert items_after_monkey_2 == \
+        items(turn(1, turn(1, turn(1, d11_s01, 0), 1), 2))
+
+    items_after_monkey_3 = [[20, 23, 27, 26],
+                            [2080, 25, 167, 207, 401, 1046],
+                            [],
+                            []]
+    assert items_after_monkey_3 == \
+        items(turn(1, turn(1, turn(1, turn(1, d11_s01, 0), 1), 2), 3))
 
 
-def test_round():
+def test_round_1():
     assert [[20, 23, 27, 26],
             [2080, 25, 167, 207, 401, 1046],
             [],
-            []] == items(round(d11_s01))
+            []] == items(round_1(d11_s01))
     assert [[695, 10, 71, 135, 350],
             [43, 49, 58, 55, 362],
             [],
-            []] == items(round(round(d11_s01)))
+            []] == items(round_1(round_1(d11_s01)))
     assert [[16, 18, 21, 20, 122],
             [1468, 22, 150, 286, 739],
             [],
-            []] == items(round(round(round(d11_s01))))
+            []] == items(round_1(round_1(round_1(d11_s01))))
     assert [[83, 44, 8, 184, 9, 20, 26, 102],
             [110, 36],
             [],
-            []] == items(nth(15, rounds(d11_s01)))
+            []] == items(nth(15, rounds_1(d11_s01)))
     assert [[10, 12, 14, 26, 34],
             [245, 93, 53, 199, 115],
             [],
-            []] == items(nth(20, rounds(d11_s01)))
+            []] == items(nth(20, rounds_1(d11_s01)))
 
 
 def test_counts():
-    assert [2, 4, 3, 5] == counts(round(d11_s01))
-    assert [101, 95, 7, 105] == counts(nth(20, rounds(d11_s01)))
+    assert [2, 4, 3, 5] == counts(round_1(d11_s01))
+    assert [101, 95, 7, 105] == counts(nth(20, rounds_1(d11_s01)))
 
 
 def test_counts_part2():
     d11_s01_part2 = part2_augment(d11_s01)
-    assert [2, 4, 3, 6] == counts(round_part2(d11_s01_part2))
-    assert [99, 97, 8, 103] == counts(nth(20, rounds_part2(d11_s01_part2)))
+    assert [2, 4, 3, 6] == counts(round_2(d11_s01_part2))
+    assert [99, 97, 8, 103] == counts(nth(20, rounds_2(d11_s01_part2)))
     assert [5204, 4792, 199, 5192] == \
-        counts(nth(1000, rounds_part2(d11_s01_part2)))
+        counts(nth(1000, rounds_2(d11_s01_part2)))
     assert [52166, 47830, 1938, 52013] == \
-        counts(nth(10000, rounds_part2(d11_s01_part2)))
-
-
-def test_monkey_business():
-    assert 10605 == monkey_business(d11_s01, 20)
-
-
-def test_monkey_business_part2():
-    assert 2713310158 == monkey_business_part2(d11_s01, 10000)
+        counts(nth(10000, rounds_2(d11_s01_part2)))
 
 
 def test_part2_augment():
@@ -147,6 +129,11 @@ def test_part2_augment():
 
             [{2: 0, 3: 2, 5: 4, 7: 4, 9: 2, 11: 8, 13: 9, 17: 6, 19: 17, 23: 5}]] == \
         items(part2_augment(d11_s01))
+
+
+def test_monkey_business():
+    assert 10605 == monkey_business(1, d11_s01, 20)
+    assert 2713310158 == monkey_business(2, d11_s01, 10000)
 
 
 d11_input = parse(standard_puzzle_input(year=2022, day=11))
