@@ -1,6 +1,7 @@
 from aoc2022.day11 import parse, part1, part2, Monkey,\
     items, turn, counts, round_1, round_2, rounds_1, rounds_2, \
     monkey_business, part2_augment
+from operator import add, mul
 from toolz import nth
 from utils.core import standard_puzzle_input
 
@@ -33,13 +34,13 @@ Monkey 3:
     If false: throw to monkey 1""".splitlines()
 
 d11_s01 = [
-    Monkey(operation=('*',   19), divisor=23, t_dest=2, f_dest=3, counts=0,
+    Monkey(operation=(mul,   19), divisor=23, t_dest=2, f_dest=3, counts=0,
            items=[79, 98]),
-    Monkey(operation=('+',    6), divisor=19, t_dest=2, f_dest=0, counts=0,
+    Monkey(operation=(add,    6), divisor=19, t_dest=2, f_dest=0, counts=0,
            items=[54, 65, 75, 74]),
-    Monkey(operation=('*', None), divisor=13, t_dest=1, f_dest=3, counts=0,
+    Monkey(operation=(mul, None), divisor=13, t_dest=1, f_dest=3, counts=0,
            items=[79, 60, 97]),
-    Monkey(operation=('+',    3), divisor=17, t_dest=0, f_dest=1, counts=0,
+    Monkey(operation=(add,    3), divisor=17, t_dest=0, f_dest=1, counts=0,
            items=[74])
 ]
 

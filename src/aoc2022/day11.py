@@ -1,6 +1,7 @@
 """Solution to https://adventofcode.com/2022/day/11"""
 from collections import defaultdict, namedtuple
 from functools import partial, reduce
+from operator import add, mul
 from toolz import iterate, nth, take
 from utils.core import AoCSolution, split_at_blanklines
 
@@ -22,7 +23,8 @@ L6_START = len("    If false: throw to monkey ")
 
 def parse_operation(opstr):
     _, operand, arg = opstr.split()
-    return (operand, None if arg == "old" else int(arg))
+    return (add if operand == '+' else mul,
+            None if arg == "old" else int(arg))
 
 
 def parse_monkey(monkey_spec):
@@ -87,21 +89,11 @@ def operate(part, operation, item):
     match part:
         case 1:
             arg = arg if arg else item
-            match op:
-                case '+':
-                    return item + arg
-                case '*':
-                    return item * arg
+            return op(item, arg)
         case 2:
             mod, rem = item
             arg = arg if arg else rem
-            match op:
-                case '+':
-                    return (mod, (rem + arg) % mod)
-                    # return (mod, mod_add(mod, rem, arg))
-                case '*':
-                    return (mod, (rem * arg) % mod)
-                    # return (mod, mod_mul(mod, rem, (arg if arg else rem)))
+            return (mod, op(rem, arg) % mod)
 
 
 def worry(part, operation, item):
@@ -127,18 +119,27 @@ def division_test(part, worry, divisor):
             return worry.get(divisor) == 0
 
 
+def toss_to(part, monkey):
+    """Determine the new worry value of the `monkey`s next item
+    and the destination monkey to whom it should be tossed. `part` should be 
+    set to 1 or 2 to use the logic defined for that part of the puzzle."""
+    operation, divisor, t_dest, f_dest, _, items = monkey
+    wry = worry(part, operation, items[0])
+    divides = division_test(part, wry, divisor)
+    dest = t_dest if divides else f_dest
+    return (wry, dest)
+
+
 def next_toss(part, id, monkeys):
     """Returns a new state of all the monkeys after tossing the next
     item held by the monkey indicated by `id`. `part` should be set to 1
     or 2 to use the logic defined for that part of the puzzle."""
     monkey = monkeys[id]
-    operation, divisor, t_dest, f_dest, counts, items = monkey
-    wry = worry(part, operation, items[0])
-    divides = division_test(part, wry, divisor)
-    dest = t_dest if divides else f_dest
-    new_monkeys = [x for x in monkeys]
-    new_monkeys[id] = monkey._replace(items=items[1:],
-                                      counts=counts+1)
+    wry, dest = toss_to(part, monkey)
+
+    new_monkeys = monkeys[:]
+    new_monkeys[id] = monkey._replace(items=monkey.items[1:],
+                                      counts=monkey.counts+1)
     new_monkeys[dest] = \
         monkeys[dest]._replace(items=monkeys[dest].items + [wry])
     return new_monkeys
