@@ -8,6 +8,7 @@ from aoc2022.day07 import day07_soln
 from aoc2022.day08 import day08_soln
 from aoc2022.day09 import day09_soln
 from aoc2022.day10 import day10_soln
+from aoc2022.day11 import day11_soln
 
 solutions = {
     1:  day01_soln,
@@ -20,7 +21,7 @@ solutions = {
     8:  day08_soln,
     9:  day09_soln,
     10: day10_soln,
-    # 11: day11_soln,
+    11: day11_soln,
     # 12: day12_soln,
     # 13: day13_soln,
     # 14: day14_soln,
