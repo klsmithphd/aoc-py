@@ -1,6 +1,12 @@
 """Solution to https://adventofcode.com/2022/day/13"""
-from utils.core import split_at_blanklines
-from toolz import first
+from functools import cmp_to_key
+from utils.core import AoCSolution, split_at_blanklines
+from toolz import concat, concatv
+
+
+# Constants
+
+divider_packets = [[[[2]], [[6]]]]
 
 # Input parsing
 
@@ -49,13 +55,26 @@ def inorder_packet_id_sum(input):
     return sum(idx+1 for idx, pair in enumerate(input) if isinorder(*pair))
 
 
+def sorted_packets(input):
+    all_packets = concat(concatv(input, divider_packets))
+    return sorted(all_packets, key=cmp_to_key(packet_compare))
+
+
+def decoder_key(input):
+    packets = sorted_packets(input)
+    p0 = packets.index([[2]])+1
+    p1 = packets.index([[6]])+1
+    return p0 * p1
+
 # Puzzle solutions
+
 
 def part1(input):
     return inorder_packet_id_sum(input)
 
 
-# day13_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+def part2(input):
+    return decoder_key(input)
+
+
+day13_soln = AoCSolution(parse, part1, part2)
