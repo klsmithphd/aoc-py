@@ -65,6 +65,7 @@ def dijkstra(graph, start, istarget):
     from `start` until the function `istarget` evaluated against a node
     returns true, or if a path cannot be found, returns None.
     """
+
     # tentative distance to each node. Initially, we only know the start node
     dist = {start: 0}
 
@@ -96,4 +97,45 @@ def dijkstra(graph, start, istarget):
                 queue[neighbor] = alt
                 prev[neighbor] = vertex
         visited.add(vertex)
+
+    return path_retrace(prev, vertex) if istarget(vertex) else None
+
+
+def astar(graph, start, istarget, heuristic):
+    """Using the A* algorithm, returns the shortest path in `graph`
+    from `start` until the function `istarget` evaluated against a node
+    returns true, using the `heuristic` function to guide the path-finding.
+    The heuristic function should accept a single argument (a node in the
+    graph) and should estimate the cost of reaching the target destination.
+
+    If a path to the target cannot be found, returns None"""
+
+    # tentative distance to each node. Initially, we only know the start node
+    dist = {start: 0}
+
+    # a dict mapping nodes to the previous node on the shortest-hop path
+    # discovered so far
+    prev = {}
+
+    # A Priority Queue (here implemented by a heapdict) for the next nodes
+    # to examine.
+    queue = heapdict({start: heuristic(start)})
+
+    # The next node to visit
+    vertex = start
+    while (not (istarget(vertex)) and len(queue) > 0):
+        vertex, _ = queue.popitem()
+        for neighbor in (v for v in graph.edges(vertex)):
+            # alt is the distance from the start node to the neighbor
+            # node if we go through vertex
+            alt = dist.get(vertex) + graph.distance(vertex, neighbor)
+
+            # If alt is shorter than the current known distance to neighbor
+            # (or infinity if unknown), update our records with this newly
+            # discovered shorter path
+            if (alt < dist.get(neighbor, inf)):
+                dist[neighbor] = alt
+                queue[neighbor] = alt + heuristic(neighbor)
+                prev[neighbor] = vertex
+
     return path_retrace(prev, vertex) if istarget(vertex) else None
