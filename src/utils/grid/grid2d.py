@@ -15,6 +15,9 @@ class Grid2D(Protocol):
     def contains(self, pos):
         """Returns True if the `pos` is within the extent of the grid"""
 
+    def positions(self):
+        """Returns a collection of all the positions contained in the grid"""
+
     def value(self, pos):
         """Returns the value of the grid at the position `pos` (a tuple)"""
         pass
