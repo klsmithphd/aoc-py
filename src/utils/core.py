@@ -68,11 +68,16 @@ def standard_puzzle_input(year: int, day: int) -> Iterable[str]:
     return puzzle_input_iter(input_path(year, day))
 
 
+def isequal(x):
+    """Returns a function that will test for equality with `x` """
+    return lambda y: y == x
+
+
 def split_at_blanklines(lines: Iterable[str]) -> Iterable[list[str]]:
     """
     Split a list of items into groups when separated by blank (empty) lines
     """
-    return split_at(lines, lambda s: s == "")
+    return split_at(lines, isequal(""))
 
 
 def isnotnone(x):

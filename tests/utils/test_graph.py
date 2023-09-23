@@ -1,3 +1,4 @@
+from utils.core import isequal
 from utils.graph import DictGraph, astar, dijkstra
 
 g1 = DictGraph({'a': {'b': 1},
@@ -51,11 +52,11 @@ def test_distance():
 
 
 def test_dijkstra():
-    assert None == dijkstra(g3, 'a', lambda v: v == 'NotANode')
-    assert ['a'] == dijkstra(g3, 'a', lambda v: v == 'a')
-    assert ['a', 'd', 'e'] == dijkstra(g3, 'a', lambda v: v == 'e')
-    assert ['a', 'd', 'c', 'f'] == dijkstra(g3, 'a', lambda v: v == 'f')
+    assert None == dijkstra(g3, 'a', isequal('NotANode'))
+    assert ['a'] == dijkstra(g3, 'a', isequal('a'))
+    assert ['a', 'd', 'e'] == dijkstra(g3, 'a', isequal('e'))
+    assert ['a', 'd', 'c', 'f'] == dijkstra(g3, 'a', isequal('f'))
 
 
 def test_astar():
-    assert ['a', 'e', 'f', 'g'] == astar(g4, 'a', lambda v: v == 'g', g4_heur)
+    assert ['a', 'e', 'f', 'g'] == astar(g4, 'a', isequal('g'), g4_heur)
