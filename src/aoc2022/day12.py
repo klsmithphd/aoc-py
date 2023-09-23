@@ -47,13 +47,17 @@ def shortest_path_length(graph, start, end):
 
 
 def shortest_path_from_start(input):
+    graph = grid_to_graph(input)
     start = first(find_matches(input, START))
     end = first(find_matches(input, END))
-    graph = grid_to_graph(input)
+
     return shortest_path_length(graph, start, end)
 
 
 # Puzzle solutions
+
+def part1(input):
+    return shortest_path_from_start(input)
 
 # day12_soln = \
 #     AoCSolution(parse,
