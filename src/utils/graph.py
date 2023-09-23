@@ -60,10 +60,12 @@ def path_retrace(prev, finish):
         return list(reversed(nodes))
 
 
-def dijkstra(graph, start, istarget):
+def dijkstra(graph: Graph, start, istarget):
     """Using Dijkstra's algorith, returns the shortest path in `graph`,
     from `start` until the function `istarget` evaluated against a node
-    returns true, or if a path cannot be found, returns None.
+    returns True.
+
+    If a path cannot be found, returns `None`.
     """
 
     # tentative distance to each node. Initially, we only know the start node
@@ -101,14 +103,14 @@ def dijkstra(graph, start, istarget):
     return path_retrace(prev, vertex) if istarget(vertex) else None
 
 
-def astar(graph, start, istarget, heuristic):
+def astar(graph: Graph, start, istarget, heuristic):
     """Using the A* algorithm, returns the shortest path in `graph`
     from `start` until the function `istarget` evaluated against a node
     returns true, using the `heuristic` function to guide the path-finding.
     The heuristic function should accept a single argument (a node in the
     graph) and should estimate the cost of reaching the target destination.
 
-    If a path to the target cannot be found, returns None"""
+    If a path to the target cannot be found, returns `None`"""
 
     # tentative distance to each node. Initially, we only know the start node
     dist = {start: 0}
