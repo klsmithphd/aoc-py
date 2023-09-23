@@ -52,31 +52,48 @@ def isnotnone(x):
 
 
 def path_retrace(prev, finish):
-    nodes = tuple(takewhile(isnotnone, iterate(lambda x: prev.get(x), finish)))
-    return tuple(reversed(nodes))
-
-
-def dijkstra_update(graph, vertex, state, neighbor):
-    dist = state['dist']
-    alt = dist.get(vertex) + graph.distance(vertex, neighbor)
-    if (alt < dist.get(neighbor, inf)):
-        state['dist'][neighbor] = alt
-        state['queue'][neighbor] = alt
-        state['prev'][neighbor] = vertex
-    return state
+    if (len(prev) == 0):
+        return tuple(finish)
+    else:
+        nodes = tuple(takewhile(isnotnone, iterate(
+            lambda x: prev.get(x), finish)))
+        return tuple(reversed(nodes))
 
 
 def dijkstra(graph, start, istarget):
-    state = {'dist': {start: 0},
-             'prev': {},
-             'queue': heapdict(start=0)}
+    """Using Dijkstra's algorith, returns the shortest path in `graph`,
+    from `start` until the function `istarget` evaluated against a node
+    returns true, or if a path cannot be found, returns None.
+    """
+    # tentative distance to each node. Initially, we only know the start node
+    dist = {start: 0}
+
+    # a dict mapping nodes to the previous node on the shortest-hop path
+    # discovered so far
+    prev = {}
+
+    # A Priority Queue (here implemented by a heapdict) for the next nodes
+    # to examine.
+    queue = heapdict({start: 0})
+
+    # The next node to visit
     vertex = start
+
+    # The set of nodes visited thus far
     visited = set()
-    while (not (istarget(vertex)) and len(state['queue']) > 0):
-        neighbors = (v for v in graph.edges(vertex) if v not in visited)
-        updater = partial(dijkstra_update, graph, vertex)
-        state = reduce(updater, neighbors, state)
-        state['queue'].popitem()
+    while (not (istarget(vertex)) and len(queue) > 0):
+        vertex, _ = queue.popitem()
+        for neighbor in (v for v in graph.edges(vertex) if v not in visited):
+            # alt is the distance from the start node to the neighbor
+            # node if we go through vertex
+            alt = dist.get(vertex) + graph.distance(vertex, neighbor)
+
+            # If alt is shorter than the current known distance to neighbor
+            # (or infinity if unknown), update our records with this newly
+            # discovered shorter path
+            if (alt < dist.get(neighbor, inf)):
+                dist[neighbor] = alt
+                queue[neighbor] = alt
+                prev[neighbor] = vertex
         visited.add(vertex)
-        vertex, _ = state['queue'].peekitem()
-    return path_retrace(state['prev'], vertex)
+    return path_retrace(prev, vertex) if istarget(vertex) else None
