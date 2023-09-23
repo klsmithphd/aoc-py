@@ -1,5 +1,5 @@
-from aoc2022.day12 import parse, part1, \
-    find_matches, transitions, shortest_path_from_start
+from aoc2022.day12 import parse, part1, part2,\
+    find_matches, transitions, shortest_path_from_start, shortest_path_from_any_a
 from utils.core import standard_puzzle_input
 from utils.grid.listgrid2d import ListGrid2D
 
@@ -36,6 +36,10 @@ def test_shortest_path_length():
     assert 31 == shortest_path_from_start(d12_s0)
 
 
+def test_shortest_path_from_any_a():
+    assert 29 == shortest_path_from_any_a(d12_s0)
+
+
 d12_input = parse(standard_puzzle_input(year=2022, day=12))
 
 
@@ -43,5 +47,5 @@ def test_day12_part1_soln():
     assert 408 == part1(d12_input)
 
 
-# def test_day12_part2_soln():
-#     assert 1 == day12_soln.part2(d12_input)
+def test_day12_part2_soln():
+    assert 399 == part2(d12_input)
