@@ -36,7 +36,7 @@ class ListGrid2D(Grid2D):
         return neighbors_2d(self, pos, diagonals=True)
 
 
-def strings_to_ListGrid(charmap, strings):
+def strings_to_ListGrid2D(charmap, strings):
     """Returns a new ListGrid instance formed by converting characters
     in a string into values in the grid. `charmap` is a function of a 
     single character that converts the character into a value useful to

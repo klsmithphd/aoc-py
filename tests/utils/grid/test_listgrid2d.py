@@ -1,4 +1,4 @@
-from utils.grid.listgrid2d import ListGrid2D, strings_to_ListGrid
+from utils.grid.listgrid2d import ListGrid2D, strings_to_ListGrid2D
 
 sample = ListGrid2D([[1, 2, 3],
                      [4, 5, 6]])
@@ -23,4 +23,4 @@ def test_ListGrid():
 
 def test_strings_to_ListGrid():
     assert ListGrid2D([[0, 0, 1], [0, 1, 0]]) == \
-        strings_to_ListGrid(lambda c: 0 if c == '.' else 1, ["..#", ".#."])
+        strings_to_ListGrid2D(lambda c: 0 if c == '.' else 1, ["..#", ".#."])
