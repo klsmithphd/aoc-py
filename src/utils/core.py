@@ -73,3 +73,8 @@ def split_at_blanklines(lines: Iterable[str]) -> Iterable[list[str]]:
     Split a list of items into groups when separated by blank (empty) lines
     """
     return split_at(lines, lambda s: s == "")
+
+
+def isnotnone(x):
+    """Returns True if the argument `x` is not None"""
+    return x is not None

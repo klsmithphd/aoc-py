@@ -1,9 +1,9 @@
-from functools import partial, reduce
 from itertools import takewhile
 from heapdict import heapdict
 from math import inf
-from toolz import assoc, iterate
+from toolz import iterate
 from typing import Protocol
+from utils.core import isnotnone
 
 
 class Graph(Protocol):
@@ -47,17 +47,17 @@ class DictGraph(Graph):
         return self.__d.get(v1).get(v2)
 
 
-def isnotnone(x):
-    return x is not None
-
-
 def path_retrace(prev, finish):
+    """Helper function for graph traversal algorithms that returns a
+    sequence of nodes along a path, given `prev`, a dict that maps
+    each node to its previous node along a preferred path, and `finish`,
+    the endpoint of the path."""
     if (len(prev) == 0):
-        return tuple(finish)
+        return [finish]
     else:
-        nodes = tuple(takewhile(isnotnone, iterate(
+        nodes = list(takewhile(isnotnone, iterate(
             lambda x: prev.get(x), finish)))
-        return tuple(reversed(nodes))
+        return list(reversed(nodes))
 
 
 def dijkstra(graph, start, istarget):

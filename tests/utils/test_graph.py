@@ -38,6 +38,6 @@ def test_distance():
 
 def test_dijkstra():
     assert None == dijkstra(g3, 'a', lambda v: v == 'NotANode')
-    assert ('a',) == dijkstra(g3, 'a', lambda v: v == 'a')
-    assert ('a', 'd', 'e') == dijkstra(g3, 'a', lambda v: v == 'e')
-    assert ('a', 'd', 'c', 'f') == dijkstra(g3, 'a', lambda v: v == 'f')
+    assert ['a'] == dijkstra(g3, 'a', lambda v: v == 'a')
+    assert ['a', 'd', 'e'] == dijkstra(g3, 'a', lambda v: v == 'e')
+    assert ['a', 'd', 'c', 'f'] == dijkstra(g3, 'a', lambda v: v == 'f')
