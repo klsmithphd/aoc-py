@@ -10,7 +10,7 @@ class ListGrid2D(Grid2D):
         self.__width = len(l[0])
 
     def __eq__(self, other):
-        return self.__grid == other._ListGrid__grid
+        return self.__grid == other._ListGrid2D__grid
 
     def contains(self, pos):
         x, y = pos
