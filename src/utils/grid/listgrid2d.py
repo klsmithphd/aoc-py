@@ -12,15 +12,18 @@ class ListGrid2D(Grid2D):
     def __eq__(self, other):
         return self.__grid == other._ListGrid2D__grid
 
-    def contains(self, pos):
-        x, y = pos
-        return (0 <= x < self.__width) and (0 <= y < self.__height)
-
     def width(self):
         return self.__width
 
     def height(self):
         return self.__height
+
+    def contains(self, pos):
+        x, y = pos
+        return (0 <= x < self.__width) and (0 <= y < self.__height)
+
+    def positions(self):
+        return ((x, y) for y in range(self.__height) for x in range(self.__width))
 
     def value(self, pos):
         x, y = pos
