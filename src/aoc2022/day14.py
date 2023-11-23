@@ -4,15 +4,8 @@ from more_itertools import flatten, sliding_window
 
 # Input parsing
 
-
 def parse_line(line: str):
     return [tuple(map(int, coord.split(","))) for coord in line.split(" -> ")]
-
-
-def parse(input):
-    return [parse_line(line) for line in input]
-
-# Puzzle logic
 
 
 def points(pos1, pos2):
@@ -31,7 +24,74 @@ def rocks(input):
     return set(flatten(trace_lines(line) for line in input))
 
 
+def parse(input):
+    return rocks(parse_line(line) for line in input)
+
+# Puzzle logic
+
+def move_grain(stuff, pos):
+    """A unit of sand always falls down one step if possible. 
+    If the tile immediately below is blocked (by rock or sand), 
+    the unit of sand attempts to instead move diagonally one step down and 
+    to the left. If that tile is blocked, the unit of sand attempts to instead 
+    move diagonally one step down and to the right. Sand keeps moving as long
+    as it is able to do so, at each step trying to move down, then down-left, 
+    then down-right. If all three possible destinations are blocked, 
+    the unit of sand comes to rest and no longer moves."""
+    x,y = pos
+    if (x, y+1) not in stuff:
+        return (x, y+1)
+    elif (x-1, y+1) not in stuff:
+        return (x-1, y+1)
+    elif (x+1, y+1) not in stuff:
+        return (x+1, y+1)
+    else:
+        return (x,y)
+        
+    
+def next_grain_pos(stuff, low_point):
+    pos = (500, 0)
+    # Logically, this ought to be "iterate_until_static"
+    # In clojure, I called that `converge`
+    while True:        
+        next_pos = move_grain(stuff, pos)
+        if pos == next_pos or next_pos[1] > low_point:
+            break
+        else:
+            pos = next_pos
+    return pos
+
+
+def lowest(stuff):
+    return max(x[1] for x in stuff)
+
+def deposit_sand_grains(rocks):
+    stuff = set(rocks)
+    low_point = lowest(stuff)
+    while True:
+        next_grain = next_grain_pos(stuff, low_point)
+        if next_grain[1] == low_point:
+            break
+        else: 
+            stuff.add(next_grain)
+    return stuff
+
+
+def grains_until_stopped(rocks):
+    original = len(rocks)
+    final = len(deposit_sand_grains(rocks))
+    return final - original
+
+
 # Puzzle solutions
+
+def part1(input):
+    """
+    Using your scan, simulate the falling sand. How many units of sand come 
+    to rest before sand starts flowing into the abyss below?
+    """
+    return grains_until_stopped(input)
+
 
 # day14_soln = \
 #     AoCSolution(parse,
