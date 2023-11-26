@@ -1,4 +1,4 @@
-from aoc2022.day14 import parse, part1, parse_line, next_grain_pos, grains_until_stopped
+from aoc2022.day14 import parse, part1, part2, parse_line, next_grain_pos, grains_until_stopped
 from utils.core import standard_puzzle_input
 
 d14_s0_raw = """498,4 -> 498,6 -> 496,6
@@ -7,7 +7,7 @@ d14_s0_raw = """498,4 -> 498,6 -> 496,6
 d14_s0_coords = [[(498, 4), (498, 6), (496, 6)],
                  [(503, 4), (502, 4), (502, 9), (494, 9)]]
 
-d14_s0 = {(498, 4),
+d14_s0 = {  (498, 4),
             (498, 5),
             (498, 6),
             (497, 6),
@@ -47,6 +47,7 @@ def test_next_grain_pos():
 
 def test_grains_until_stopped():
     assert 24 == grains_until_stopped(d14_s0)
+    assert 93 == grains_until_stopped(d14_s0, False)
 
 
 d14_input = parse(standard_puzzle_input(year=2022, day=14))
@@ -56,5 +57,5 @@ def test_day14_part1_soln():
     assert 913 == part1(d14_input)
 
 
-# def test_day14_part2_soln():
-#     assert 1 == day14_soln.part2(d14_input)
+def test_day14_part2_soln():
+    assert 30762 == part2(d14_input)

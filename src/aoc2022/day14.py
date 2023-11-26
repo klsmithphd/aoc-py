@@ -65,21 +65,26 @@ def next_grain_pos(stuff, low_point):
 def lowest(stuff):
     return max(x[1] for x in stuff)
 
-def deposit_sand_grains(rocks):
+def deposit_sand_grains(rocks, part1=True):
     stuff = set(rocks)
-    low_point = lowest(stuff)
+    lowest_rock = lowest(stuff)
+    low_point = lowest_rock if part1 else lowest_rock + 1
     while True:
         next_grain = next_grain_pos(stuff, low_point)
-        if next_grain[1] == low_point:
-            break
-        else: 
-            stuff.add(next_grain)
+        if part1:
+            if next_grain[1] == low_point:
+                break
+        else:
+            if next_grain == (500, 0):
+                stuff.add(next_grain)
+                break
+        stuff.add(next_grain)
     return stuff
 
 
-def grains_until_stopped(rocks):
+def grains_until_stopped(rocks, part1=True):
     original = len(rocks)
-    final = len(deposit_sand_grains(rocks))
+    final = len(deposit_sand_grains(rocks, part1))
     return final - original
 
 
@@ -91,6 +96,13 @@ def part1(input):
     to rest before sand starts flowing into the abyss below?
     """
     return grains_until_stopped(input)
+
+def part2(input):
+    """
+    Using your scan, simulate the falling sand until the source of the sand 
+    becomes blocked. How many units of sand come to rest?
+    """
+    return grains_until_stopped(input, False)
 
 
 # day14_soln = \
