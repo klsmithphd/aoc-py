@@ -1,4 +1,4 @@
-from aoc2022.day14 import parse, part1, part2, parse_line, next_grain_pos, grains_until_stopped
+from aoc2022.day14 import parse, part1, part2, parse_line, next_grain_pos, grains_deposited
 from utils.core import standard_puzzle_input
 
 d14_s0_raw = """498,4 -> 498,6 -> 496,6
@@ -46,8 +46,8 @@ def test_next_grain_pos():
 
 
 def test_grains_until_stopped():
-    assert 24 == grains_until_stopped(d14_s0)
-    assert 93 == grains_until_stopped(d14_s0, False)
+    assert 24 == grains_deposited(d14_s0)
+    assert 93 == grains_deposited(d14_s0, False)
 
 
 d14_input = parse(standard_puzzle_input(year=2022, day=14))
