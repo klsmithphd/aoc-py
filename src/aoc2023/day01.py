@@ -19,6 +19,8 @@ SPELLED = {
 # words or individual digits. The complexity of the zero-width
 # positive-lookahead is necessary to handle cases like `eightwo`,
 # which should match both `eight` and `two`"
+#
+# Evaluates to r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))'
 SPELLED_REGEX = compile(f"(?=(\\d|{'|'.join(SPELLED.keys())}))")
 
 
