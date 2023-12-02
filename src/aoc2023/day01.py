@@ -15,6 +15,10 @@ SPELLED = {
     'nine':  9
 }
 
+# "A zero-width with positive-lookahead pattern to find spelled out
+# words or individual digits. The complexity of the zero-width
+# positive-lookahead is necessary to handle cases like `eightwo`,
+# which should match both `eight` and `two`"
 SPELLED_REGEX = compile(f"(?=(\\d|{'|'.join(SPELLED.keys())}))")
 
 
