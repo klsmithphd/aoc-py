@@ -28,3 +28,4 @@ dev = [
 
 [tool.pdm.scripts]
 test = "pytest"
+aoc = "src/aoc.py"

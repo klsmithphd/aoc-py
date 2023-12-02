@@ -2,9 +2,11 @@
 from argparse import ArgumentParser
 from utils.core import input_path, puzzle_input
 import aoc2022
+import aoc2023
 
 solutions = {
-    2022: aoc2022.solutions
+    2022: aoc2022.solutions,
+    2023: aoc2023.solutions
 }
 
 if __name__ == "__main__":
