@@ -1,5 +1,6 @@
 from aoc2023.day02 import parse, part1, part2, possible_game, \
-    possible_game_id_sum
+    possible_game_id_sum, fewest_cubes, power_fewest_cubes, \
+    power_fewest_cubes_sum
 from utils.core import standard_puzzle_input
 
 d02_s01_raw = """Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
@@ -40,6 +41,26 @@ def test_possible_game_id_sum():
     assert 8 == possible_game_id_sum(d02_s01)
 
 
+def test_fewest_cubes():
+    assert {'red': 4, 'green': 2, 'blue': 6} == fewest_cubes(d02_s01[0])
+    assert {'red': 1, 'green': 3, 'blue': 4} == fewest_cubes(d02_s01[1])
+    assert {'red': 20, 'green': 13, 'blue': 6} == fewest_cubes(d02_s01[2])
+    assert {'red': 14, 'green': 3, 'blue': 15} == fewest_cubes(d02_s01[3])
+    assert {'red': 6, 'green': 3, 'blue': 2} == fewest_cubes(d02_s01[4])
+
+
+def test_power_fewest_cubes():
+    assert 48 == power_fewest_cubes(d02_s01[0])
+    assert 12 == power_fewest_cubes(d02_s01[1])
+    assert 1560 == power_fewest_cubes(d02_s01[2])
+    assert 630 == power_fewest_cubes(d02_s01[3])
+    assert 36 == power_fewest_cubes(d02_s01[4])
+
+
+def test_power_fewest_cubes_sum():
+    assert 2286 == power_fewest_cubes_sum(d02_s01)
+
+
 d02_input = parse(standard_puzzle_input(year=2023, day=2))
 
 
@@ -47,5 +68,5 @@ def test_day01_part1_soln():
     assert 2162 == part1(d02_input)
 
 
-# def test_day01_part2_soln():
-#     assert 72513 == part2(d02_input)
+def test_day01_part2_soln():
+    assert 72513 == part2(d02_input)
