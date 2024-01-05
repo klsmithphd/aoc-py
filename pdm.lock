@@ -3,10 +3,9 @@
 
 [metadata]
 groups = ["default", "dev"]
-cross_platform = true
-static_urls = false
-lock_version = "4.3"
-content_hash = "sha256:9a73713cfa04d0653d9f8b63ce58f78454dfe46d71b5be1e20e8ffac832f75e3"
+strategy = ["cross_platform"]
+lock_version = "4.4"
+content_hash = "sha256:2d20d3c834aab37742d02d76463ac6ae97d920457bb0d22956036f70e50dc81f"
 
 [[package]]
 name = "anyio"
@@ -169,6 +168,14 @@ dependencies = [
 files = [
     {file = "bleach-6.0.0-py3-none-any.whl", hash = "sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4"},
     {file = "bleach-6.0.0.tar.gz", hash = "sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414"},
+]
+
+[[package]]
+name = "cardinality"
+version = "0.1.1"
+summary = "Determine and check the size of any iterable"
+files = [
+    {file = "cardinality-0.1.1.tar.gz", hash = "sha256:8fc223c1a1433842ea30ba2569a14d21144330094ab21e9c1801977fceeef1ea"},
 ]
 
 [[package]]
