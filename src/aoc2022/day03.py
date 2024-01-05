@@ -2,7 +2,6 @@
 from functools import reduce
 from more_itertools import sliced, chunked
 from pipe import map
-from utils.core import AoCSolution
 
 # Input parsing
 
@@ -72,6 +71,3 @@ def part2(input):
     group. What is the sum of the priorities of those item types?
     """
     return overlap_priority_sum(input, part1=False)
-
-
-day03_soln = AoCSolution(parse, part1, part2)

@@ -4,7 +4,7 @@ from functools import reduce, partial
 from itertools import zip_longest
 from parse import parse as str_parse
 from pipe import Pipe, islice, map
-from utils.core import AoCSolution, split_at_blanklines
+from utils.core import split_at_blanklines
 
 
 # Input parsing
@@ -77,6 +77,3 @@ def part2(input):
     of each stack?
     """
     return stack_tops_after_steps(input, part1=False)
-
-
-day05_soln = AoCSolution(parse, part1, part2)

@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 from functools import partial, reduce
 from operator import add, mul
 from toolz import iterate, nth, take
-from utils.core import AoCSolution, split_at_blanklines
+from utils.core import split_at_blanklines
 
 # Input parsing
 
@@ -239,6 +239,3 @@ def part2(input):
     manageable. Starting again from the initial state in your puzzle input, 
     what is the level of monkey business after 10000 rounds?"""
     return monkey_business(2, input, 10000)
-
-
-day11_soln = AoCSolution(parse, part1, part2)

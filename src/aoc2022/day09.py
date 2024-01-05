@@ -2,7 +2,6 @@
 from itertools import accumulate, repeat
 from more_itertools import flatten
 from operator import add, sub
-from utils.core import AoCSolution
 
 # Constants
 
@@ -90,6 +89,3 @@ def part2(input):
     How many positions does the tail of the rope visit at least once?
     """
     return unique_tail_pos_count(input, 10)
-
-
-day09_soln = AoCSolution(parse, part1, part2)

@@ -1,6 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/6"""
 from toolz import sliding_window, isdistinct, first
-from utils.core import AoCSolution
 
 # Input parsing
 
@@ -38,6 +37,3 @@ def part2(input):
     start-of-message marker is detected?
     """
     return chars_to_distinct_run(14, input)
-
-
-day06_soln = AoCSolution(parse, part1, part2)
