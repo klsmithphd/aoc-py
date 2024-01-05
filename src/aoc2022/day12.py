@@ -1,6 +1,6 @@
 """Solution to https://adventofcode.com/2022/day/12"""
 from toolz import first, concatv
-from utils.core import AoCSolution, isequal
+from utils.core import isequal
 from utils.graph import DictGraph, dijkstra
 from utils.grid.grid2d import Grid2D
 from utils.grid.listgrid2d import strings_to_ListGrid2D
@@ -92,6 +92,3 @@ def part2(input):
     """What is the fewest steps required to move starting from any square with 
     elevation a to the location that should get the best signal?"""
     return shortest_path_from_any_a(input)
-
-
-day12_soln = AoCSolution(parse, part1, part2)

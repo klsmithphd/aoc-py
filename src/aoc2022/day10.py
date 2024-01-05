@@ -2,7 +2,6 @@
 from itertools import accumulate, islice, repeat
 from more_itertools import chunked, flatten
 from operator import add, mul
-from utils.core import AoCSolution
 
 # Input parsing
 
@@ -98,6 +97,3 @@ def part2(input):
     appear on your CRT?
     """
     return screen(input)
-
-
-day10_soln = AoCSolution(parse, part1, part2)

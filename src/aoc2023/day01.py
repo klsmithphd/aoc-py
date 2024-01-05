@@ -1,6 +1,5 @@
 """ Solution to https://adventofcode.com/2023/day/1 """
 from re import compile, findall
-from utils.core import AoCSolution
 
 # Constants
 SPELLED = {
@@ -74,6 +73,3 @@ def part2(input):
 
     What is the sum of all of the calibration values?"""
     return calibration_value_sum(input, spelled=True)
-
-
-day01_soln = AoCSolution(parse, part1, part2)

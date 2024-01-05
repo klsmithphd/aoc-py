@@ -1,18 +1,20 @@
-"""Solution to https://adventofcode.com/2022/day/22"""
-# from utils.core import AoCSolution
+"""Solution to https://adventofcode.com/2022/day/2"""
+
 
 # Input parsing
 
-
 def parse(input):
     return input
+
 
 # Puzzle logic
 
 
 # Puzzle solutions
 
-# day22_soln = \
-#     AoCSolution(parse,
-#                 p1=
-#                 p2=)
+def part1(input):
+    pass
+
+
+def part2(input):
+    pass

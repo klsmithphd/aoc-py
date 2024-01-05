@@ -1,7 +1,7 @@
 """ Solution to https://adventofcode.com/2022/day/1 """
 from collections.abc import Iterable
 from pipe import Pipe, map, sort, take
-from utils.core import AoCSolution, split_at_blanklines
+from utils.core import split_at_blanklines
 
 # Input parsing
 
@@ -47,6 +47,3 @@ def part2(input: Iterable[list[int]]) -> int:
     How many Calories are those Elves carrying in total?
     """
     return top_n_capacity_sum(input, n=3)
-
-
-day01_soln = AoCSolution(parse, part1, part2)

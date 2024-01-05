@@ -1,7 +1,6 @@
 """Solution to https://adventofcode.com/2022/day/8"""
 from itertools import takewhile
 from more_itertools import flatten
-from utils.core import AoCSolution
 
 # Input parsing
 
@@ -130,6 +129,3 @@ def part2(input):
     for any tree?
     """
     return max_scenic_score(input)
-
-
-day08_soln = AoCSolution(parse, part1, part2)

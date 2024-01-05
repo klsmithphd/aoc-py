@@ -1,6 +1,5 @@
 """ Solution to https://adventofcode.com/2022/day/2"""
-from pipe import map, filter
-from utils.core import AoCSolution
+from pipe import map
 
 # Input parsing
 
@@ -126,6 +125,3 @@ def part2(input):
     strategy guide?
     """
     return total_score(input, interpret2)
-
-
-day02_soln = AoCSolution(parse, part1, part2)

@@ -1,6 +1,5 @@
 """Solution to https://adventofcode.com/2022/day/14"""
 from more_itertools import flatten, sliding_window
-from utils.core import AoCSolution
 
 # Constants
 
@@ -41,6 +40,7 @@ def parse(input):
 
 # Puzzle logic
 
+
 def move_grain(stuff, pos):
     """A unit of sand always falls down one step if possible. 
     If the tile immediately below is blocked (by rock or sand), 
@@ -50,7 +50,7 @@ def move_grain(stuff, pos):
     as it is able to do so, at each step trying to move down, then down-left, 
     then down-right. If all three possible destinations are blocked, 
     the unit of sand comes to rest and no longer moves."""
-    x,y = pos
+    x, y = pos
     if (x, y+1) not in stuff:
         return (x, y+1)
     elif (x-1, y+1) not in stuff:
@@ -58,9 +58,9 @@ def move_grain(stuff, pos):
     elif (x+1, y+1) not in stuff:
         return (x+1, y+1)
     else:
-        return (x,y)
-        
-    
+        return (x, y)
+
+
 def next_grain_pos(stuff, low_point):
     """
     Returns the location of the next sand grain to be deposited, given
@@ -68,7 +68,7 @@ def next_grain_pos(stuff, low_point):
     `low_point` which is not be exceeded. 
     """
     pos = START_POS
-    while True:        
+    while True:
         next_pos = move_grain(stuff, pos)
         if pos == next_pos or next_pos[1] > low_point:
             break
@@ -79,6 +79,7 @@ def next_grain_pos(stuff, low_point):
 def lowest(stuff):
     """Returns the greatest y coordinate"""
     return max(x[1] for x in stuff)
+
 
 def deposit_sand_grains(rocks, part1=True):
     """Returns the final set of all rocks and deposited sand grains, 
@@ -118,12 +119,10 @@ def part1(input):
     """
     return grains_deposited(input)
 
+
 def part2(input):
     """
     Using your scan, simulate the falling sand until the source of the sand 
     becomes blocked. How many units of sand come to rest?
     """
     return grains_deposited(input, False)
-
-
-day14_soln = AoCSolution(parse, part1, part2)

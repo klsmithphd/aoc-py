@@ -2,7 +2,6 @@
 from functools import cache, reduce
 from more_itertools import flatten, split_before
 from toolz import assoc_in, get_in, first
-from utils.core import AoCSolution
 
 # Constants
 TOTAL_DISK_SPACE = 70000000
@@ -164,6 +163,3 @@ def part2(input):
     directory?
     """
     return smallest_dir_size_to_remove(input)
-
-
-day07_soln = AoCSolution(parse, part1, part2)

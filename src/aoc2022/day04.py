@@ -1,6 +1,4 @@
 """Solution to https://adventofcode.com/2022/day/4"""
-from pipe import map
-from utils.core import AoCSolution
 
 # Input parsing
 
@@ -74,6 +72,3 @@ def part2(input):
     In how many assignment pairs do the ranges overlap?
     """
     return overlapping_count(input)
-
-
-day04_soln = AoCSolution(parse, part1, part2)

@@ -1,6 +1,6 @@
 """Solution to https://adventofcode.com/2022/day/13"""
 from functools import cmp_to_key
-from utils.core import AoCSolution, split_at_blanklines
+from utils.core import split_at_blanklines
 from toolz import concat, concatv
 
 
@@ -101,6 +101,3 @@ def part2(input):
     """Organize all of the packets into the correct order. 
     What is the decoder key for the distress signal?"""
     return decoder_key(input)
-
-
-day13_soln = AoCSolution(parse, part1, part2)

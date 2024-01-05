@@ -2,7 +2,6 @@
 from functools import reduce
 from operator import mul
 from re import findall
-from utils.core import AoCSolution
 
 
 # Constants
@@ -107,6 +106,3 @@ def part2(input):
     """For each game, find the minimum set of cubes that must have been present. 
     What is the sum of the power of these sets?"""
     return power_fewest_cubes_sum(input)
-
-
-day02_soln = AoCSolution(parse, part1, part2)

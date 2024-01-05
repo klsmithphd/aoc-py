@@ -1,13 +1,12 @@
 """ Runner for solutions to Advent of Code challenges """
 from argparse import ArgumentParser
-from utils.core import input_path, puzzle_input
-import aoc2022
-import aoc2023
+from importlib import import_module
+from utils.core import input_path, puzzle_input, AoCSolution
 
-solutions = {
-    2022: aoc2022.solutions,
-    2023: aoc2023.solutions
-}
+
+def solution_module(year, day):
+    return f"aoc{year}.day{day:02}"
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -21,7 +20,9 @@ if __name__ == "__main__":
     filename = args.input if args.input else input_path(args.year, args.day)
     input = puzzle_input(filename)
 
-    soln = solutions[args.year][args.day]
+    soln_mod = import_module(solution_module(args.year, args.day))
+    soln = AoCSolution(soln_mod.parse, soln_mod.part1, soln_mod.part2)
+
     if (args.verbose):
         print(f"Advent of Code {args.year}, Day {args.day}, using {filename}")
         print()
