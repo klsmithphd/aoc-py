@@ -1,4 +1,4 @@
-"Solution to https://adventofcode.com/2015/day/1"
+"""Solution to https://adventofcode.com/2015/day/1"""
 import cardinality
 import itertools as it
 import toolz
@@ -13,13 +13,13 @@ def parse(input):
 
 # Puzzle logic
 def final_floor(input):
-    """Compute the final floor as the sum of all the up and down moves"""
+    """Compute the final floor as the sum of all the up and down moves."""
     return sum(input)
 
 
 def first_time_in_basement(input):
     """Determine the first time the elevator reaches the basement by counting
-    how many moves it takes until the sum becomes -1"""
+    how many moves it takes until the sum becomes -1."""
     floors_until_neg = it.takewhile(lambda x: x != -1, it.accumulate(input))
     return cardinality.count(floors_until_neg) + 1
 
@@ -34,5 +34,5 @@ def part1(input):
 def part2(input):
     """Given the same list of 1s and -1s, each representing an elevator moving
     up or down one floor, return the position of the first move in the
-    sequence where the elevator reaches the basement (at -1)"""
+    sequence where the elevator reaches the basement (at -1)."""
     return first_time_in_basement(input)
