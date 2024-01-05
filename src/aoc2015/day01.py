@@ -26,13 +26,13 @@ def first_time_in_basement(input):
 
 # Puzzle logic
 def part1(input):
-    """Given a list of 1s or -1s, each representing an elevator moving
+    """Given a list of `1`s and `-1`s, each representing an elevator moving
     up or down one floor, return the floor reached at the end of the moves."""
     return final_floor(input)
 
 
 def part2(input):
-    """Given the same list of 1s and -1s, each representing an elevator moving
-    up or down one floor, return the position of the first move in the
+    """Given the same list of `1`s and `-1`s, each representing an elevator 
+    moving up or down one floor, return the position of the first move in the
     sequence where the elevator reaches the basement (at -1)."""
     return first_time_in_basement(input)
