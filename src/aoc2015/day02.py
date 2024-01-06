@@ -17,6 +17,7 @@ def wrapping_paper_area(a, b, c):
     The dimensions must be already ordered in ascending size. The wrapping 
     paper formula is the sum of the areas of all the sides plus an extra
     amount equal to the area of the smallest side."""
+    assert a <= b <= c
     return (2 * a * b) + (2 * b * c) + (2 * a * c) + (a * b)
 
 
@@ -26,6 +27,7 @@ def ribbon_length(a, b, c):
     The dimensions must already be ordered in ascending size. The ribbon 
     formula is the sum of the perimeter of the smallest side of the box 
     plus an extra amount equal to the volume of the box."""
+    assert a <= b <= c
     return (2 * (a + b)) + (a * b * c)
 
 
