@@ -3,7 +3,7 @@
 
 # Input parsing
 def parse_line(line: str):
-    return tuple(map(int, line.split('x')))
+    return tuple(sorted(map(int, line.split('x'))))
 
 
 def parse(input):
@@ -11,16 +11,30 @@ def parse(input):
 
 
 # Puzzle-logic
-def wrapping_paper_area(box):
-    """Computes the total wrapping paper area required for a `box`
-    (a tuple of a length, width, and height value). The wrapping paper
-    formula is the sum of the areas of all the sides plus an extra
-    amount equal to the area of the smallest side"""
-    a, b, c = sorted(box)
+def wrapping_paper_area(a, b, c):
+    """Computes the wrapping paper area given the three dimensions of a box.
+
+    The dimensions must be already ordered in ascending size. The wrapping 
+    paper formula is the sum of the areas of all the sides plus an extra
+    amount equal to the area of the smallest side."""
     return (2 * a * b) + (2 * b * c) + (2 * a * c) + (a * b)
+
+
+def ribbon_length(a, b, c):
+    """Computes the ribbon length given the three dimensions of a box.
+
+    The dimensions must already be ordered in ascending size. The ribbon 
+    formula is the sum of the perimeter of the smallest side of the box 
+    plus an extra amount equal to the volume of the box."""
+    return (2 * (a + b)) + (a * b * c)
 
 
 # Puzzle solutions
 def part1(input):
-    """Computes the total wrapping paper required for all the input"""
-    return sum(wrapping_paper_area(x) for x in input)
+    """Computes the total wrapping paper required for all the input boxes"""
+    return sum(wrapping_paper_area(*box) for box in input)
+
+
+def part2(input):
+    """Computes the total ribbon length required for all the input boxes"""
+    return sum(ribbon_length(*box) for box in input)
