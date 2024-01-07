@@ -17,6 +17,7 @@ def test_parse():
 def test_brightness():
     assert 1000000 == d06.part1(d06_s00[:1])
     assert 999000 == d06.part1(d06_s00[:2])
+    assert 998996 == d06.part1(d06_s00)
 
 
 day06_input = d06.parse(u.standard_puzzle_input(year=2015, day=6))
