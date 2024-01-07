@@ -22,7 +22,7 @@ def parse(input):
 
 # Puzzle logic
 def init_grid():
-    return list(it.repeat(list(it.repeat(0, 1000)), 1000))
+    return [[0 for x in range(1000)] for y in range(1000)]
 
 
 toggle = {0: 1, 1: 0}
@@ -36,10 +36,7 @@ def part1_update(grid, cmd, x, y):
 
 
 def dec_min_zero(x):
-    if x == 0:
-        return x
-    else:
-        return x-1
+    return 0 if x == 0 else x-1
 
 
 def part2_update(grid, cmd, x, y):
@@ -65,14 +62,10 @@ def brightness(grid):
 
 # Puzzle solutions
 def part1(input):
-    grid = init_grid()
-    for inst in input:
-        update_grid(part1_update, grid, inst)
-    return brightness(grid)
+    update = functools.partial(update_grid, part1_update)
+    return brightness(functools.reduce(update, input, init_grid()))
 
 
 def part2(input):
-    grid = init_grid()
-    for inst in input:
-        update_grid(part2_update, grid, inst)
-    return brightness(grid)
+    update = functools.partial(update_grid, part2_update)
+    return brightness(functools.reduce(update, input, init_grid()))
