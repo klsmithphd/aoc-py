@@ -19,7 +19,7 @@ def look_and_say(s: str):
 
 def nth_value(n, seed):
     """Starting from `seed`, run the look_and_say fn `n` times"""
-    return len(toolz.nth(n, mit.iterate(lambda x: look_and_say(x), seed)))
+    return len(toolz.nth(n, mit.iterate(look_and_say, seed)))
 
 
 # Puzzle solutions
