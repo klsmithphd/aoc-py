@@ -44,7 +44,13 @@ def test_increment():
         d11.increment([0, 25, 25, 25, 25, 25, 25, 25])
 
 
-# WAY TOO SLOW!
+def test_next_wo_disallowed_chars():
+    assert "hjaaaaaa" == d11.nums_fn(d11.next_wo_disallowed_chars, "hijklmmn")
+    assert "jaaaaaaa" == d11.nums_fn(d11.next_wo_disallowed_chars, "ijklmnop")
+    assert "abcdefgh" == d11.nums_fn(d11.next_wo_disallowed_chars, "abcdefgh")
+    assert "ghjaaaaa" == d11.nums_fn(d11.next_wo_disallowed_chars, "ghijklmn")
+
+
 def test_next_valid_password():
     assert d11_s03_next == d11.next_valid_password(d11_s03)
     assert d11_s04_next == d11.next_valid_password(d11_s04)
