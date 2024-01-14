@@ -51,6 +51,13 @@ def test_next_wo_disallowed_chars():
     assert "ghjaaaaa" == d11.nums_fn(d11.next_wo_disallowed_chars, "ghijklmn")
 
 
+def test_next_aabcc():
+    assert "hacaabcc" == d11.nums_fn(d11.next_aabcc, "habxxzzz")
+    assert "habxxyzz" == d11.nums_fn(d11.next_aabcc, "habxxyzz")
+    assert "habbbcdd" == d11.nums_fn(d11.next_aabcc, "habaabcd")
+    assert "ghjaabcc" == d11.nums_fn(d11.next_aabcc, "ghjaaaaa")
+
+
 def test_next_valid_password():
     assert d11_s03_next == d11.next_valid_password(d11_s03)
     assert d11_s04_next == d11.next_valid_password(d11_s04)

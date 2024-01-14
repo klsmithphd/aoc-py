@@ -1,14 +1,14 @@
 """Solution to https://adventofcode.com/2015/day/11"""
 import cardinality
-import itertools as it
 import more_itertools as mit
 import toolz
+import utils.core as u
 
 # Constants
-a_val = ord('a')
-rightmost_index = 7
-alphabet_length = 26
-xxyzz = [23, 23, 24, 25, 25]
+A_VAL = ord('a')
+RIGHTMOST_INDEX = 7
+ALPHABET_LENGTH = 26
+XXYZZ = [23, 23, 24, 25, 25]
 
 # Input parsing
 parse = toolz.first
@@ -17,12 +17,12 @@ parse = toolz.first
 # Puzzle logic
 def string_as_ints(s: str):
     """Converts a string to a list of integer values in the range 0-25"""
-    return [ord(ch) - a_val for ch in s]
+    return [ord(ch) - A_VAL for ch in s]
 
 
 def ints_as_string(ints):
     """Converts a list of ints (0-25) to a string of lowercase letters"""
-    return "".join(chr(i+a_val) for i in ints)
+    return "".join(chr(i+A_VAL) for i in ints)
 
 
 def nums_fn(fn, s: str):
@@ -55,13 +55,12 @@ def two_distinct_pairs(ints):
     return len(distinct_pairs) >= 2
 
 
-disallowed_set = set(string_as_ints("ilo"))
-pre_disallowed_set = set(string_as_ints("hkn"))
+DISALLOWED_SET = set(string_as_ints("ilo"))
 
 
 def no_disallowed(ints):
     """Whether any disallowed numbers are included"""
-    return cardinality.count(i for i in ints if i in disallowed_set) == 0
+    return cardinality.count(i for i in ints if i in DISALLOWED_SET) == 0
 
 
 def valid_password(ints):
@@ -74,30 +73,23 @@ def valid_password(ints):
 def increment(ints):
     """Increment the number represented as a list of ints (base 26) to the
     next value"""
-    index = rightmost_index
-    if ints[index] + 1 < alphabet_length:
+    index = RIGHTMOST_INDEX
+    if ints[index] + 1 < ALPHABET_LENGTH:
         ints[index] += 1
         return ints
     while index >= 0:
         ints[index] = 0
         index -= 1
-        if ints[index] + 1 < alphabet_length:
+        if ints[index] + 1 < ALPHABET_LENGTH:
             ints[index] += 1
             return ints
-
-
-def index_of(pred, coll):
-    try:
-        return toolz.first(i[0] for i in enumerate(coll) if pred(i[1]))
-    except StopIteration:
-        return None
 
 
 def next_wo_disallowed_chars(ints):
     """Returns the next password number sequence that doesn't contain any
     disallowed characters"""
-    idx = index_of(lambda x: x in disallowed_set, ints)
-    return ints[:idx] + [ints[idx]+1] + [0]*(7 - idx) if idx is not None else ints
+    idx = u.index_of(lambda x: x in DISALLOWED_SET, ints)
+    return ints[:idx] + [ints[idx]+1] + [0]*(7 - idx) if u.isnotnone(idx) else ints
 
 
 def next_aabcc(ints):
@@ -105,12 +97,12 @@ def next_aabcc(ints):
     in the lowest digits. That is, a pattern that consists of two different
     pairs sandwiching a 3-digit increasing straight"""
     d0, d1, d2, *_ = ints
-    if ints[3:] > xxyzz:
+    if ints[3:] > XXYZZ:
         # If the last five chars are past xxyzz, the next option is aabcc (00122)
         # after incrementing the 2nd char
         print("here0")
         return [d0, d1, d2+1, 0, 0, 1, 2, 2]
-    elif ints[3:] == xxyzz:
+    elif ints[3:] == XXYZZ:
         print("here1")
         # If exactly xxyzz, then we have a valid password
         return ints
@@ -131,10 +123,13 @@ def next_aabcc(ints):
 
 
 def has_a_pair(ints):
+    """Whether the first 3 values contain a pair"""
     return ints[0] == ints[1] or ints[1] == ints[2]
 
 
 def increment_fast(ints):
+    """An optimized version of the incrementing that allows us to skip
+    large swaths of the solution space"""
     new_ints = next_wo_disallowed_chars(increment(ints))
     if not increasing_triplet(new_ints[:3]) and not has_a_pair(new_ints[:3]):
         return next_aabcc(new_ints)
