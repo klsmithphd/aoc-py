@@ -1,7 +1,8 @@
 """Common utilities for many Advent of Code solutions"""
 from collections.abc import Iterable
-from more_itertools import split_at, with_iter
 from pathlib import Path
+import more_itertools as mit
+import toolz
 
 
 class AoCSolution():
@@ -49,7 +50,7 @@ def puzzle_input_iter(path: Path) -> Iterable[str]:
     Load a puzzle input from the provided `path`, returning an iterator over
     the lines of the input as strings
     """
-    return (line.rstrip() for line in with_iter(open(path)))
+    return (line.rstrip() for line in mit.with_iter(open(path)))
 
 
 def puzzle_input(path: Path) -> list[str]:
@@ -77,9 +78,21 @@ def split_at_blanklines(lines: Iterable[str]) -> Iterable[list[str]]:
     """
     Split a list of items into groups when separated by blank (empty) lines
     """
-    return split_at(lines, isequal(""))
+    return mit.split_at(lines, isequal(""))
 
 
 def isnotnone(x):
     """Returns True if the argument `x` is not None"""
     return x is not None
+
+
+def index_of(pred, coll):
+    """Returns the index of the first item `x` in `coll` that satisfies 
+    `pred(x) == True`.
+
+    Only returns the index of the first match, even if there are multiple
+    matches. Returns `None` if no element satisfies the predicate."""
+    try:
+        return toolz.first(i[0] for i in enumerate(coll) if pred(i[1]))
+    except StopIteration:
+        return None
