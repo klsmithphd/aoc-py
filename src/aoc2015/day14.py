@@ -1,6 +1,5 @@
 """Solution to https://adventofcode.com/2015/day/14"""
 import collections as c
-import itertools as it
 import re
 
 
