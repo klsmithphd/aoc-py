@@ -19,13 +19,22 @@ def parse(input):
 
 
 # Puzzle logic
+def scalar_mult(vec, scale):
+    """Multiplies a vector by a scalar"""
+    return [i * scale for i in vec]
+
+
+def vec_sum(vecs):
+    """Computes the sum of an iterable of vectors"""
+    return list(map(sum, zip(*vecs)))
+
+
 def score_vec(ingredients, quantities):
     """Computes the score component vector, where each element is the 
     sum of the products of each ingredients properties and the quantity
     of that ingredient"""
-    def scalar_mult(ing, qty): return [i*qty for i in ing]
     amounts = map(scalar_mult, ingredients, quantities)
-    return [x if x >= 0 else 0 for x in map(sum, zip(*amounts))]
+    return [x if x >= 0 else 0 for x in vec_sum(amounts)]
 
 
 def score(score_vec):
@@ -44,15 +53,31 @@ def all_options(total: int, n: int):
                 for sub_option in all_options(x, n-1)]
 
 
-def max_score(ingredients):
-    """Computes the maximum possible score for the given ingredients."""
+def max_score(ingredients, cal_constraint=False):
+    """Computes the maximum possible score for the given ingredients.
+    If `cal_constraint` is `True`, only cookie recipes with exactly 500
+    calories are considered"""
+    # If cal_constraint is True, filter_fn will return True when
+    # exactly 500 calories. For cal_constraint = False, always return True
+    def filter_fn(x):
+        if cal_constraint:
+            return x[4] == CALORIE_LIMIT
+        else:
+            return True
+    # Generate all valid options for the quantities of each ingredient
     options = all_options(MAX_TEASPOONS, len(ingredients))
+    # Generate the score component vector for each option
     score_vecs = (score_vec(ingredients, opt) for opt in options)
-    return max(score(x) for x in score_vecs)
-    # return max(score(score_vec(ingredients, opt)) for opt in all_options(MAX_TEASPOONS, len(ingredients)))
+    # Return the maximum score for each vector, subject to the filter
+    return max(score(x) for x in score_vecs if filter_fn(x))
 
 
 # Puzzle solutions
 def part1(input):
     """Computes the maximum cookie score for the given ingredients"""
     return max_score(input)
+
+
+def part2(input):
+    """Computes the maximum cookie score for cookies with exactly 500 calories"""
+    return max_score(input, cal_constraint=True)

@@ -48,10 +48,15 @@ def test_all_options():
 def test_max_score():
     """Finds the maximum score across all possible combinations"""
     assert 62842880 == d15.max_score(d15_s00)
+    assert 57600000 == d15.max_score(d15_s00, cal_constraint=True)
 
 
 day15_input = d15.parse(u.standard_puzzle_input(year=2015, day=15))
 
 
 def test_part1():
-    assert 21367368 == d15.max_score(day15_input)
+    assert 21367368 == d15.part1(day15_input)
+
+
+def test_part2():
+    assert 1766400 == d15.part2(day15_input)
