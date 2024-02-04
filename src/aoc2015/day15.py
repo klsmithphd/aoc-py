@@ -3,6 +3,7 @@ import itertools as it
 import functools as ft
 import operator as op
 import re
+import utils.vectors as v
 
 # Constants
 MAX_TEASPOONS = 100
@@ -19,22 +20,12 @@ def parse(input):
 
 
 # Puzzle logic
-def scalar_mult(vec, scale):
-    """Multiplies a vector by a scalar"""
-    return [i * scale for i in vec]
-
-
-def vec_sum(vecs):
-    """Computes the sum of an iterable of vectors"""
-    return list(map(sum, zip(*vecs)))
-
-
 def score_vec(ingredients, quantities):
     """Computes the score component vector, where each element is the 
     sum of the products of each ingredients properties and the quantity
     of that ingredient"""
-    amounts = map(scalar_mult, ingredients, quantities)
-    return [x if x >= 0 else 0 for x in vec_sum(amounts)]
+    amounts = map(v.scalar_mul, ingredients, quantities)
+    return [x if x >= 0 else 0 for x in v.vec_sum(amounts)]
 
 
 def score(score_vec):
