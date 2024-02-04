@@ -1,5 +1,4 @@
 """Solution to https://adventofcode.com/2015/day/14"""
-import itertools as it
 import functools as ft
 import operator as op
 import re
