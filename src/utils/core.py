@@ -1,6 +1,7 @@
 """Common utilities for many Advent of Code solutions"""
 from collections.abc import Iterable
 from pathlib import Path
+import itertools as it
 import more_itertools as mit
 import toolz
 
@@ -96,3 +97,18 @@ def index_of(pred, coll):
         return toolz.first(i[0] for i in enumerate(coll) if pred(i[1]))
     except StopIteration:
         return None
+
+
+def iter_equals(iter1, iter2):
+    """Checks whether two iterators return the same elements. 
+
+    WARNING: This will exhaust both iterators, so make sure that they aren't 
+    needed again!"""
+    return all(a == b for a, b in it.zip_longest(iter1, iter2, fillvalue=object()))
+
+
+def iter_peek(iterator):
+    """For any iterator/generator, returns the first element and a new iterator
+    that represents all the elements of the original"""
+    first = next(iterator)
+    return first, it.chain([first], iterator)
