@@ -1,4 +1,5 @@
 import aoc2015.day18 as d18
+import utils.core as u
 
 d18_s00_raw = [
     ".#.#.#",
@@ -66,3 +67,21 @@ def test_step():
     assert d18_s00_step2 == d18.step(d18_s00_step1)
     assert d18_s00_step3 == d18.step(d18_s00_step2)
     assert d18_s00_step4 == d18.step(d18_s00_step3)
+
+
+def test_lights_at_n():
+    assert 11 == d18.lights_at_n(d18_s00, 1)
+    assert 8 == d18.lights_at_n(d18_s00, 2)
+    assert 4 == d18.lights_at_n(d18_s00, 3)
+    assert 4 == d18.lights_at_n(d18_s00, 4)
+
+
+day18_input = d18.parse(u.standard_puzzle_input(year=2015, day=18))
+
+
+def test_part1():
+    assert 1061 == d18.part1(day18_input)
+
+
+def test_part2():
+    assert 1006 == d18.part2(day18_input)
