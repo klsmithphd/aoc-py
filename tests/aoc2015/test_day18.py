@@ -57,9 +57,9 @@ def test_neighbors():
 
 
 def test_on_neighbors():
-    assert 1 == d18.on_neighbors(d18_s00[1], 0, 0)
-    assert 4 == d18.on_neighbors(d18_s00[1], 4, 0)
-    assert 2 == d18.on_neighbors(d18_s00[1], 5, 3)
+    assert 1 == d18.on_neighbors(d18_s00[1], (0, 0))
+    assert 4 == d18.on_neighbors(d18_s00[1], (4, 0))
+    assert 2 == d18.on_neighbors(d18_s00[1], (5, 3))
 
 
 def test_step():

@@ -35,10 +35,10 @@ def neighbors(x, y):
             if (nx, ny) != (x, y)]
 
 
-def on_neighbors(lights, x, y):
+def on_neighbors(lights, pos):
     """Counts the number of neighbors that are currently `on` by
     testing whether they are contained in the `lights` set."""
-    return sum(1 for nx, ny in neighbors(x, y) if (nx, ny) in lights)
+    return sum(1 for nx, ny in neighbors(*pos) if (nx, ny) in lights)
 
 
 @ft.cache
@@ -47,27 +47,42 @@ def corners(size):
     return {(0, 0), (size-1, 0), (0, size-1), (size-1, size-1)}
 
 
-def step(state, corners_on=False):
+def corners_on(size, lights):
+    """Updates the state to ensure that the corners are on"""
+    return size, lights | corners(size)
+
+
+def on_condition(lights, pos):
+    """A predicate that returns true if the light should be on in the next step.
+
+    A light which is on stays on when 2 or 3 neighbors are on; turns off otherwise.
+    A light which is off turns on if 3 neighbors are on; stays off otherwise."""
+    return pos in lights and 2 <= on_neighbors(lights, pos) <= 3 \
+        or pos not in lights and on_neighbors(lights, pos) == 3
+
+
+def step(state):
     """Given `state`, which is a tuple of `(size, lights)`, where `size`
     is the dimension of the square grid, and `lights` is a set of all the
     positions of currently on lights, compute the next state according to the
-    neighbor rules.
-
-    If `corners_on` is True, the corner cells will be forced to be in an
-    `on` state at all times."""
+    neighbor rules."""
     size, lights = state
     new_lights = {(x, y) for x, y in grid(size)
-                  if (x, y) in lights and 2 <= on_neighbors(lights, x, y) <= 3
-                  or (x, y) not in lights and on_neighbors(lights, x, y) == 3}
-    return size, new_lights | corners(size) if corners_on else new_lights
+                  if on_condition(lights, (x, y))}
+    return size, new_lights
 
 
-def lights_at_n(state, n, corners_on=False):
+def step_corners(state):
+    """Similar to `step` above, but ensure that corners are set to `on`"""
+    return corners_on(*step(state))
+
+
+def lights_at_n(state, n, corners=False):
     """Returns the number of lights that are on as of iteration `n`
 
-    If `corners_on` is set to True, the four corners will be forced to be
+    If `corners` is set to True, the four corners will be forced to be
     in an `on` state at all times."""
-    seq = mit.iterate(lambda s: step(s, corners_on), state)
+    seq = mit.iterate(step_corners if corners else step, state)
     return len(next(it.islice(seq, n, n+1))[1])
 
 
@@ -80,6 +95,4 @@ def part1(input):
 def part2(input):
     """How many lights are on after 100 iterations when the corners are kept
     always on"""
-    size, lights = input
-    adj_input = (size, corners(size) | lights)
-    return lights_at_n(adj_input, ITERATIONS, corners_on=True)
+    return lights_at_n(corners_on(*input), ITERATIONS, corners=True)
