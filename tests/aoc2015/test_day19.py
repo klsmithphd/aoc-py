@@ -64,3 +64,7 @@ day19_input = d19.parse(u.standard_puzzle_input(year=2015, day=19))
 
 def test_part1():
     assert 518 == d19.part1(day19_input)
+
+
+def test_part2():
+    assert 200 == d19.part2(day19_input)
