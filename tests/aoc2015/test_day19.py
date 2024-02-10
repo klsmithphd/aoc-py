@@ -53,10 +53,20 @@ def test_match_ranges():
 
 def test_single_replacements():
     assert ["HOOH", "HOHO"] == \
-        list(d19.single_replacements("HOH", ["H", "HO"]))
+        list(d19.single_replacements(["H", "HO"], "HOH"))
     assert ["OHOH", "HOOH"] == \
-        list(d19.single_replacements("HOH", ["H", "OH"]))
-    assert ["HHHH"] == list(d19.single_replacements("HOH", ["O", "HH"]))
+        list(d19.single_replacements(["H", "OH"], "HOH"))
+    assert ["HHHH"] == list(d19.single_replacements(["O", "HH"], "HOH"))
+
+
+def test_distinct_molecules():
+    assert 4 == len(d19.distinct_molecules(*d19_s00))
+    assert 7 == len(d19.distinct_molecules(*d19_s01))
+
+
+def test_fabrication_steps():
+    assert 3 == len(d19.fabrication_steps(d19_s00))
+    assert 6 == len(d19.fabrication_steps(d19_s01))
 
 
 day19_input = d19.parse(u.standard_puzzle_input(year=2015, day=19))
