@@ -1,4 +1,4 @@
-"""Solution to https://adventofcode.com/2015/day/18"""
+"""Solution to https://adventofcode.com/2015/day/19"""
 import itertools as it
 import more_itertools as mit
 import utils.core as u
