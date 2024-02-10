@@ -3,11 +3,12 @@ import utils.core as u
 
 
 def test_parse():
-    assert 10 == d20.parse(["10"])
+    assert 10 == d20.parse(i for i in ["10"])
 
 
 def test_presents():
     assert [1, 3, 4, 7, 6, 12, 8, 15, 13, 18] == d20.presents(10)
+    assert [1, 3, 4, 6, 5, 11, 7, 12, 12, 15] == d20.presents(10, 3)
 
 
 def test_house_with_n_presents():
@@ -16,7 +17,6 @@ def test_house_with_n_presents():
 
 
 day20_input = d20.parse(u.standard_puzzle_input(year=2015, day=20))
-print(day20_input)
 
 
 def test_part1():
