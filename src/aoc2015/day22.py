@@ -1,8 +1,8 @@
 """Solution to https://adventofcode.com/2015/day/21"""
 import collections as c
-import frozendict
 import functools as ft
-import utils.graph as graph
+from frozendict import frozendict
+from utils.graph import Graph, dijkstra
 
 
 # Constants
@@ -23,10 +23,8 @@ GameState = c.namedtuple(
      "boss_damage",
      "effects",
      "last_spell"],
-    defaults=[50, 500, 0, 0, 0, frozendict.frozendict(), None]
+    defaults=[50, 500, 0, 0, 0, frozendict(), None]
 )
-
-# Spell = c.namedtuple("Spell", ["cost", "cast"])
 
 
 # Input parsing
@@ -51,7 +49,7 @@ def update_state(state: GameState, kwargs):
 
 def start_effect(state, effect, timer, cost):
     return state._replace(
-        effects=frozendict.frozendict(state.effects | {effect: timer}),
+        effects=frozendict(state.effects | {effect: timer}),
         last_spell=effect,
         player_mana=state.player_mana-cost)
 
@@ -61,11 +59,11 @@ def update_effect_timer(state: GameState, effect):
     timer = effects[effect]
     if timer == 1:
         return state._replace(
-            effects=frozendict.frozendict({k: v for k, v in effects.items()
-                                           if k != effect}))
+            effects=frozendict({k: v for k, v in effects.items()
+                                if k != effect}))
     else:
         return state._replace(
-            effects=frozendict.frozendict(effects | {effect: timer-1}))
+            effects=frozendict(effects | {effect: timer-1}))
 
 
 def cast_magic_missile(state: GameState):
@@ -174,7 +172,7 @@ def available_spells(state: GameState):
             SPELL_COST[spell] <= state.player_mana)
 
 
-class GameGraph(graph.Graph):
+class GameGraph(Graph):
     def __init__(self, hard_mode):
         self.__mode = hard_mode
 
@@ -187,7 +185,7 @@ class GameGraph(graph.Graph):
 
 
 def winning_spells(state: GameState, hard_mode=False):
-    states = graph.dijkstra(GameGraph(hard_mode), state, iswinning)
+    states = dijkstra(GameGraph(hard_mode), state, iswinning)
     return [state.last_spell for state in states][1:]
 
 
