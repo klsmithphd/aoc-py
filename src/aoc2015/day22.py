@@ -136,11 +136,14 @@ def apply_effects(state: GameState):
     return ft.reduce(apply_effect, state.effects.keys(), state)
 
 
-def player_round(state: GameState, spell: str):
-    if (state.player_hit_points > 0):
-        return cast_spell(apply_effects(state), spell)
+def player_round(state: GameState, spell: str, hard_mode):
+    new_state = update_state(
+        state, {"player_hit_points": -1}) if hard_mode else state
+
+    if (new_state.player_hit_points > 0):
+        return cast_spell(apply_effects(new_state), spell)
     else:
-        return state
+        return new_state
 
 
 def boss_attack(state: GameState):
@@ -156,8 +159,8 @@ def boss_round(state: GameState):
         return new_state
 
 
-def combat_round(state: GameState, spell: str):
-    return boss_round(player_round(state, spell))
+def combat_round(state: GameState, spell: str, hard_mode=False):
+    return boss_round(player_round(state, spell, hard_mode))
 
 
 def iswinning(state: GameState):
@@ -172,18 +175,27 @@ def available_spells(state: GameState):
 
 
 class GameGraph(graph.Graph):
+    def __init__(self, hard_mode):
+        self.__mode = hard_mode
+
     def edges(self, state: GameState):
-        return (combat_round(state, spell) for spell in available_spells(state))
+        return (combat_round(state, spell, self.__mode)
+                for spell in available_spells(state))
 
     def distance(self, _, state: GameState):
         return SPELL_COST[state.last_spell]
 
 
-def winning_spells(state: GameState):
-    states = graph.dijkstra(GameGraph(), state, iswinning)
+def winning_spells(state: GameState, hard_mode=False):
+    states = graph.dijkstra(GameGraph(hard_mode), state, iswinning)
     return [state.last_spell for state in states][1:]
 
 
 # Puzzle solutions
 def part1(input: GameState):
     return sum(SPELL_COST[spell] for spell in winning_spells(input))
+
+
+def part2(input: GameState):
+    return sum(SPELL_COST[spell]
+               for spell in winning_spells(input, hard_mode=True))

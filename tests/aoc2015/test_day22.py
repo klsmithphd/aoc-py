@@ -94,9 +94,17 @@ def test_winning_spells():
             'recharge', 'shield', 'poison', 'drain', 'magic_missile'] == \
         d22.winning_spells(d22_s00)
 
+    assert ['poison', 'recharge', 'shield', 'poison', 'recharge',
+            'shield', 'poison', 'magic_missile', 'magic_missile'] == \
+        d22.winning_spells(d22_s00, hard_mode=True)
+
 
 day22_input = d22.parse(u.standard_puzzle_input(year=2015, day=22))
 
 
 def test_part1():
     assert 1269 == d22.part1(day22_input)
+
+
+def test_part2():
+    assert 1309 == d22.part2(day22_input)
