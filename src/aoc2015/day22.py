@@ -1,9 +1,19 @@
 """Solution to https://adventofcode.com/2015/day/21"""
 import collections as c
+import frozendict
 import functools as ft
+import utils.graph as graph
 
 
 # Constants
+SPELL_COST = {
+    "magic_missile": 53,
+    "drain": 73,
+    "shield": 113,
+    "poison": 173,
+    "recharge": 229
+}
+
 GameState = c.namedtuple(
     "GameState",
     ["player_hit_points",
@@ -13,10 +23,10 @@ GameState = c.namedtuple(
      "boss_damage",
      "effects",
      "last_spell"],
-    defaults=[50, 500, 0, 0, 0, dict(), None]
+    defaults=[50, 500, 0, 0, 0, frozendict.frozendict(), None]
 )
 
-Spell = c.namedtuple("Spell", ["cost", "cast"])
+# Spell = c.namedtuple("Spell", ["cost", "cast"])
 
 
 # Input parsing
@@ -40,19 +50,22 @@ def update_state(state: GameState, kwargs):
 
 
 def start_effect(state, effect, timer, cost):
-    return state._replace(effects=state.effects | {effect: timer},
-                          last_spell=effect,
-                          player_mana=state.player_mana-cost)
+    return state._replace(
+        effects=frozendict.frozendict(state.effects | {effect: timer}),
+        last_spell=effect,
+        player_mana=state.player_mana-cost)
 
 
 def update_effect_timer(state: GameState, effect):
     effects = state.effects
     timer = effects[effect]
     if timer == 1:
-        return state._replace(effects={k: v for k, v in effects.items()
-                                       if k != effect})
+        return state._replace(
+            effects=frozendict.frozendict({k: v for k, v in effects.items()
+                                           if k != effect}))
     else:
-        return state._replace(effects=effects | {effect: timer-1})
+        return state._replace(
+            effects=frozendict.frozendict(effects | {effect: timer-1}))
 
 
 def cast_magic_missile(state: GameState):
@@ -144,9 +157,6 @@ def boss_round(state: GameState):
 
 
 def combat_round(state: GameState, spell: str):
-    print(state)
-    print(player_round(state, spell))
-    print(boss_round(player_round(state, spell)))
     return boss_round(player_round(state, spell))
 
 
@@ -154,4 +164,26 @@ def iswinning(state: GameState):
     return state.boss_hit_points <= 0 and state.player_hit_points > 0
 
 
+def available_spells(state: GameState):
+    active_effects = set(k for k, v in state.effects.items() if v > 1)
+    return (spell for spell in SPELL_COST.keys()
+            if spell not in active_effects and
+            SPELL_COST[spell] <= state.player_mana)
+
+
+class GameGraph(graph.Graph):
+    def edges(self, state: GameState):
+        return (combat_round(state, spell) for spell in available_spells(state))
+
+    def distance(self, _, state: GameState):
+        return SPELL_COST[state.last_spell]
+
+
+def winning_spells(state: GameState):
+    states = graph.dijkstra(GameGraph(), state, iswinning)
+    return [state.last_spell for state in states][1:]
+
+
 # Puzzle solutions
+def part1(input: GameState):
+    return sum(SPELL_COST[spell] for spell in winning_spells(input))
