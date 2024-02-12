@@ -122,4 +122,36 @@ def apply_effect(state: GameState, effect: str):
 def apply_effects(state: GameState):
     return ft.reduce(apply_effect, state.effects.keys(), state)
 
+
+def player_round(state: GameState, spell: str):
+    if (state.player_hit_points > 0):
+        return cast_spell(apply_effects(state), spell)
+    else:
+        return state
+
+
+def boss_attack(state: GameState):
+    attack = max(1, (state.boss_damage - state.player_armor))
+    return update_state(state, {"player_hit_points": -attack})
+
+
+def boss_round(state: GameState):
+    new_state = apply_effects(state)
+    if (new_state.boss_hit_points > 0):
+        return boss_attack(new_state)
+    else:
+        return new_state
+
+
+def combat_round(state: GameState, spell: str):
+    print(state)
+    print(player_round(state, spell))
+    print(boss_round(player_round(state, spell)))
+    return boss_round(player_round(state, spell))
+
+
+def iswinning(state: GameState):
+    return state.boss_hit_points <= 0 and state.player_hit_points > 0
+
+
 # Puzzle solutions
