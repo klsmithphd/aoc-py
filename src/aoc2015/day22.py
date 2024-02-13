@@ -6,15 +6,8 @@ from utils.graph import Graph, dijkstra
 
 
 # Constants
-SPELL_COST = {
-    "magic_missile": 53,
-    "drain": 73,
-    "shield": 113,
-    "poison": 173,
-    "recharge": 229
-}
 
-SPELL_PROPS = {
+SPELLS = {
     "magic_missile": {
         "cost": 53,
         "changes": {"boss_hit_points": -4}
@@ -27,17 +20,23 @@ SPELL_PROPS = {
     "shield": {
         "cost": 113,
         "duration": 6,
-        "changes": {"player_armor": 7}
+        "on_start": {"player_armor": 7},
+        "on_turn": {},
+        "on_end": {"player_armor": -7}
     },
     "poison": {
         "cost": 173,
         "duration": 6,
-        "changes": {"boss_hit_points": -3}
+        "on_start": {},
+        "on_turn": {"boss_hit_points": -3},
+        "on_end": {}
     },
     "recharge": {
         "cost": 229,
         "duration": 5,
-        "changes": {"player_mana": 101}
+        "on_start": {},
+        "on_turn": {"player_mana": 101},
+        "on_end": {}
     }
 }
 
@@ -65,104 +64,72 @@ def parse(input):
 
 
 # Puzzle logic
+# Candidate for a utility function for namedtuples
 def set_state(state, kwargs):
     return state._replace(**kwargs)
 
 
+# Candidate for a utility function for namedtuples
 def update_state(state: GameState, kwargs):
     return state._replace(**{k: getattr(state, k) + v
                              for k, v in kwargs.items()})
 
 
-def start_effect(state, effect, timer):
+# Candidate for a utility function
+def without_keys(d: dict, keys):
+    return {k: v for k, v in d.items() if k not in keys}
+
+
+def set_effect_timer(state, effect, timer):
     return state._replace(effects=frozendict(state.effects | {effect: timer}))
+
+
+def set_effects(state, new_effects):
+    return state._replace(effects=frozendict(new_effects))
+
+
+def start_effect(state, effect, timer):
+    return set_effect_timer(state, effect, timer)
 
 
 def update_effect_timer(state: GameState, effect):
     effects = state.effects
     timer = effects[effect]
-    if timer == 1:
-        return state._replace(
-            effects=frozendict({k: v for k, v in effects.items()
-                                if k != effect}))
+    if timer == SPELLS[effect]["duration"]:
+        state = update_state(state, SPELLS[effect]["on_start"])
+    if timer > 1:
+        return set_effect_timer(state, effect, timer-1)
     else:
-        return state._replace(
-            effects=frozendict(effects | {effect: timer-1}))
+        return set_effects(update_state(state, SPELLS[effect]["on_end"]),
+                           without_keys(effects, [effect]))
 
 
-def cast_helper(state: GameState, spell: str):
-    if "duration" in SPELL_PROPS["drain"].keys():
-        return start_effect(state, spell, SPELL_PROPS[spell]["duration"])
+def iseffect(spell: str):
+    return "duration" in SPELLS[spell].keys()
+
+
+def cast_helper(spell: str, state: GameState):
+    if iseffect(spell):
+        return start_effect(state, spell, SPELLS[spell]["duration"])
     else:
-        return update_state(state, SPELL_PROPS[spell]["changes"])
+        return update_state(state, SPELLS[spell]["changes"])
 
 
-def cast_magic_missile(state: GameState):
-    return cast_helper(state, "magic_missile")
-
-
-def cast_drain(state: GameState):
-    return cast_helper(state, "drain")
-
-
-def effect_helper(state: GameState, spell: str):
-    return start_effect(state, spell, SPELL_PROPS[spell]["duration"])
-
-
-def cast_shield(state: GameState):
-    return effect_helper(state, "shield")
-
-
-def cast_poison(state: GameState):
-    return effect_helper(state, "poison")
-
-
-def cast_recharge(state: GameState):
-    return effect_helper(state, "recharge")
-
-
-def shield_effect(state: GameState):
-    shield_timer = state.effects['shield']
-    match shield_timer:
-        case 6: return state._replace(player_armor=7)
-        case 1: return state._replace(player_armor=0)
-        case _: return state
-
-
-def poison_effect(state: GameState):
-    return update_state(state, {"boss_hit_points": -3})
-
-
-def recharge_effect(state: GameState):
-    return update_state(state, {"player_mana": 101})
-
-
-SPELLS = {
-    "magic_missile": cast_magic_missile,
-    "drain":         cast_drain,
-    "shield":        cast_shield,
-    "poison":        cast_poison,
-    "recharge":      cast_recharge
-}
-
-EFFECTS = {
-    "shield":   shield_effect,
-    "poison":   poison_effect,
-    "recharge": recharge_effect
-}
+def effect_helper(effect: str, state: GameState):
+    return update_state(state, SPELLS[effect]["on_turn"])
 
 
 def cast_spell(state: GameState, spell: str):
     """Update the game state according to the spell being cast."""
     new_state = update_state(
-        state, {"player_mana": -SPELL_PROPS[spell]["cost"]})
-    return set_state(SPELLS[spell](new_state), {"last_spell": spell})
+        state, {"player_mana": -SPELLS[spell]["cost"]})
+    return set_state(cast_helper(spell, new_state), {"last_spell": spell})
 
 
 def apply_effect(state: GameState, effect: str):
     """For a given effect, update the state and decrement the
     effect's timer."""
-    return update_effect_timer(EFFECTS[effect](state), effect)
+    return update_effect_timer(effect_helper(effect, state), effect)
 
 
 def apply_effects(state: GameState):
@@ -220,9 +187,9 @@ def available_spells(state: GameState):
     """The collection of spells that the player can cast given the
     current game state."""
     active_effects = set(k for k, v in state.effects.items() if v > 1)
-    return (spell for spell in SPELL_COST.keys()
+    return (spell for spell in SPELLS.keys()
             if spell not in active_effects and
-            SPELL_COST[spell] <= state.player_mana)
+            SPELLS[spell]["cost"] <= state.player_mana)
 
 
 class GameGraph(Graph):
@@ -239,7 +206,7 @@ class GameGraph(Graph):
                 for spell in available_spells(state))
 
     def distance(self, _, state: GameState):
-        return SPELL_COST[state.last_spell]
+        return SPELLS[state.last_spell]["cost"]
 
 
 def winning_spells(start: GameState, hard_mode=False):
@@ -252,10 +219,10 @@ def winning_spells(start: GameState, hard_mode=False):
 # Puzzle solutions
 def part1(input: GameState):
     """Least amount of mana to spend to win the game"""
-    return sum(SPELL_COST[spell] for spell in winning_spells(input))
+    return sum(SPELLS[spell]["cost"] for spell in winning_spells(input))
 
 
 def part2(input: GameState):
     """Least amount of mana to spend to win the game in hard mode"""
-    return sum(SPELL_COST[spell]
+    return sum(SPELLS[spell]["cost"]
                for spell in winning_spells(input, hard_mode=True))
