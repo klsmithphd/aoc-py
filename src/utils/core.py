@@ -112,3 +112,32 @@ def iter_peek(iterator):
     that represents all the elements of the original"""
     first = next(iterator)
     return first, it.chain([first], iterator)
+
+
+def add(x):
+    """Returns a function that will add `x` to any other argument"""
+    return lambda y: y + x
+
+
+def nt_set(tup, kwargs: dict):
+    """Sets one or more values in a named tuple using the field names and 
+    values specified in the dict argument
+
+    Example:
+        `nt_set(point_tuple, {"x": 1, "y": 2})`"""
+    return tup._replace(**kwargs)
+
+
+def nt_update(tup, kwargs: dict):
+    """Updates one or more values in a named tuple using the field names
+    and functions specified in the dict argument
+
+    Example:
+        `nt_update(point_tuple, {"x": lambda x: x*2})`"""
+    return tup._replace(**{k: f(getattr(tup, k)) for k, f in kwargs.items()})
+
+
+# Candidate for a utility function
+def without_keys(d: dict, keys):
+    """Returns a new dict from `d` without the keys specified in the collection"""
+    return {k: v for k, v in d.items() if k not in keys}

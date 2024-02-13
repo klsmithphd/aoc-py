@@ -1,12 +1,12 @@
 """Solution to https://adventofcode.com/2015/day/21"""
 import collections as c
 import functools as ft
+import utils.core as u
 from frozendict import frozendict
 from utils.graph import Graph, dijkstra
 
 
 # Constants
-
 SPELLS = {
     "magic_missile": {
         "cost": 53,
@@ -64,72 +64,58 @@ def parse(input):
 
 
 # Puzzle logic
-# Candidate for a utility function for namedtuples
-def set_state(state, kwargs):
-    return state._replace(**kwargs)
+def state_update(state: GameState, spell: str, key: str):
+    """Update the state according to the expected changes recorded
+    for the given spell/effect under `key` in the SPELLS constant"""
+    return u.nt_update(state,
+                       {k: u.add(v) for k, v in SPELLS[spell][key].items()})
 
 
-# Candidate for a utility function for namedtuples
-def update_state(state: GameState, kwargs):
-    return state._replace(**{k: getattr(state, k) + v
-                             for k, v in kwargs.items()})
+def state_key_update(state: GameState, key: str, val: int):
+    """Update the state's key by adding `val` to the current value"""
+    return u.nt_update(state, {key: u.add(val)})
 
 
-# Candidate for a utility function
-def without_keys(d: dict, keys):
-    return {k: v for k, v in d.items() if k not in keys}
-
-
-def set_effect_timer(state, effect, timer):
+def set_effect_timer(state: GameState, effect: str, timer: int):
+    """Set the effect's timer to the provided value"""
     return state._replace(effects=frozendict(state.effects | {effect: timer}))
 
 
-def set_effects(state, new_effects):
+def set_effects(state: GameState, new_effects: dict):
+    """Replace the state's effects value with the provided dict"""
     return state._replace(effects=frozendict(new_effects))
 
 
-def start_effect(state, effect, timer):
-    return set_effect_timer(state, effect, timer)
-
-
-def update_effect_timer(state: GameState, effect):
-    effects = state.effects
-    timer = effects[effect]
-    if timer == SPELLS[effect]["duration"]:
-        state = update_state(state, SPELLS[effect]["on_start"])
-    if timer > 1:
-        return set_effect_timer(state, effect, timer-1)
-    else:
-        return set_effects(update_state(state, SPELLS[effect]["on_end"]),
-                           without_keys(effects, [effect]))
-
-
 def iseffect(spell: str):
+    """Boolean function that returns true if the spell is an effect"""
     return "duration" in SPELLS[spell].keys()
 
 
-def cast_helper(spell: str, state: GameState):
-    if iseffect(spell):
-        return start_effect(state, spell, SPELLS[spell]["duration"])
-    else:
-        return update_state(state, SPELLS[spell]["changes"])
-
-
-def effect_helper(effect: str, state: GameState):
-    return update_state(state, SPELLS[effect]["on_turn"])
-
-
 def cast_spell(state: GameState, spell: str):
-    """Update the game state according to the spell being cast."""
-    new_state = update_state(
-        state, {"player_mana": -SPELLS[spell]["cost"]})
-    return set_state(cast_helper(spell, new_state), {"last_spell": spell})
+    """Update the game state according to the spell being cast, 
+    including decrementing the player's mana by the cost of the spell
+    and recording the spell cast in the `last_spell` variable."""
+    if iseffect(spell):
+        s1 = set_effect_timer(state, spell, SPELLS[spell]["duration"])
+    else:
+        s1 = state_update(state, spell, "changes")
+    s2 = state_key_update(s1, "player_mana", -SPELLS[spell]["cost"])
+    return u.nt_set(s2, {"last_spell": spell})
 
 
 def apply_effect(state: GameState, effect: str):
     """For a given effect, update the state and decrement the
     effect's timer."""
-    return update_effect_timer(effect_helper(effect, state), effect)
+    effects = state.effects
+    timer = effects[effect]
+    state = state_update(state, effect, "on_turn")
+    if timer == SPELLS[effect]["duration"]:
+        state = state_update(state, effect, "on_start")
+    if timer > 1:
+        return set_effect_timer(state, effect, timer-1)
+    else:
+        return set_effects(state_update(state, effect, "on_end"),
+                           u.without_keys(effects, [effect]))
 
 
 def apply_effects(state: GameState):
@@ -143,8 +129,8 @@ def player_round(state: GameState, spell: str, hard_mode):
 
     If `hard_mode` is set, the player will lose one hit point
     before anything else happens."""
-    new_state = update_state(
-        state, {"player_hit_points": -1}) if hard_mode else state
+    new_state = state_key_update(state, "player_hit_points", -1) \
+        if hard_mode else state
 
     if (new_state.player_hit_points > 0):
         return cast_spell(apply_effects(new_state), spell)
@@ -156,7 +142,7 @@ def boss_attack(state: GameState):
     """The boss's attack will reduce the player's hit points by the 
     boss's damage value, less any armor buff the player has."""
     attack = max(1, (state.boss_damage - state.player_armor))
-    return update_state(state, {"player_hit_points": -attack})
+    return state_key_update(state, "player_hit_points", -attack)
 
 
 def boss_round(state: GameState):
