@@ -1,4 +1,4 @@
-"""Solution to https://adventofcode.com/2015/day/21"""
+"""Solution to https://adventofcode.com/2015/day/22"""
 import collections as c
 import functools as ft
 import utils.core as u
