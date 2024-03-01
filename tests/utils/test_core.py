@@ -23,3 +23,9 @@ def test_nt_update():
 def test_without_keys():
     assert {"x": 1, "y": 2} == \
         u.without_keys({"x": 1, "y": 2, "z": 3}, ["z", "a"])
+
+
+def test_product():
+    assert 6 == u.product([1, 2, 3])
+    assert 10 == u.product([10])
+    assert 1 == u.product([])

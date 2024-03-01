@@ -1,7 +1,6 @@
 """Solution to https://adventofcode.com/2015/day/24"""
 import itertools as it
-import functools as ft
-import operator as op
+import utils.core as u
 
 
 # Input parsing
@@ -31,14 +30,10 @@ def smallest_passenger_packages(n: int, weights):
     return partitions
 
 
-def product(coll):
-    return ft.reduce(op.mul, coll)
-
-
 def best_quantum_entanglement(partitions):
     """Finds the best (minimum) quantum entanglement, which is just the product
     of the packages' weights"""
-    return min(product(p) for p in partitions)
+    return min(u.product(p) for p in partitions)
 
 
 def ideal_quantum_entanglement(n: int, weights):
