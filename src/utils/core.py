@@ -1,9 +1,11 @@
 """Common utilities for many Advent of Code solutions"""
+import itertools as it
+import functools as ft
+import more_itertools as mit
+import operator as op
+import toolz
 from collections.abc import Iterable
 from pathlib import Path
-import itertools as it
-import more_itertools as mit
-import toolz
 
 
 class AoCSolution():
@@ -137,7 +139,17 @@ def nt_update(tup, kwargs: dict):
     return tup._replace(**{k: f(getattr(tup, k)) for k, f in kwargs.items()})
 
 
-# Candidate for a utility function
 def without_keys(d: dict, keys):
     """Returns a new dict from `d` without the keys specified in the collection"""
     return {k: v for k, v in d.items() if k not in keys}
+
+
+def product(iterable, /, start=1):
+    """Much like the built-in `sum()`, this returns the product of all of the
+    items in a iterable
+
+    **NOTE**: the behavior on an empty collection is defined to return 1.
+
+    Much like `sum()`, you can specify a `start` value either positionally
+    or as a keyword argument to adjust the starting value for the product."""
+    return ft.reduce(op.mul, iterable, start)
