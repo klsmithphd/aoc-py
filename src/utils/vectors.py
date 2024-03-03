@@ -30,3 +30,8 @@ def vec_sum(vecs):
             return list(sums)
         case _:
             return sums
+
+
+def vec_add(a, b):
+    """Take two vectors and return their sum"""
+    return vec_sum((a, b))

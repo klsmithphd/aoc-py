@@ -25,3 +25,8 @@ def test_vec_sum():
     # If the first vector is an iterator, an iterator is returned
     assert u.iter_equals(iter([1, 2, 3]),
                          v.vec_sum([iter([1, 2, 3])]))
+
+
+def test_vec_add():
+    assert (6, 8) == v.vec_add((2, 10), (4, -2))
+    assert [6, 8] == v.vec_add([2, 10], [4, -2])

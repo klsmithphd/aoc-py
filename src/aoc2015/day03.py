@@ -1,7 +1,7 @@
 """Solution to https://adventofcode.com/2015/day/3"""
 import itertools as it
-import operator as op
 import toolz
+import utils.vectors as v
 
 
 # Constants
@@ -12,14 +12,9 @@ parse = toolz.first
 
 
 # Puzzle logic
-def tuple_add(a, b):
-    """Take two tuples representing positions and return their sum"""
-    return tuple(map(op.add, a, b))
-
-
 def visits(dirs):
     """Convert `dirs` into an iterable of the positions visited"""
-    return it.accumulate((dir_dict[x] for x in dirs), tuple_add, initial=(0, 0))
+    return it.accumulate((dir_dict[x] for x in dirs), v.vec_add, initial=(0, 0))
 
 
 def split_visits(dirs):
