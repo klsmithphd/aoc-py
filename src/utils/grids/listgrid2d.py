@@ -1,4 +1,4 @@
-from utils.grid.grid2d import Grid2D, adj_coords_2d, neighbors_2d
+from utils.grids.grid2d import Grid2D, adj_coords_2d, neighbors_2d
 
 
 class ListGrid2D(Grid2D):

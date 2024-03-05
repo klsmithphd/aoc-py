@@ -1,4 +1,4 @@
-from utils.grid.listgrid2d import ListGrid2D, strings_to_ListGrid2D
+from utils.grids.listgrid2d import ListGrid2D, strings_to_ListGrid2D
 
 sample = ListGrid2D([[1, 2, 3],
                      [4, 5, 6]])

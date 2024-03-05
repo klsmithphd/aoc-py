@@ -2,8 +2,8 @@
 from toolz import first, concatv
 from utils.core import isequal
 from utils.graph import DictGraph, dijkstra
-from utils.grid.grid2d import Grid2D
-from utils.grid.listgrid2d import strings_to_ListGrid2D
+from utils.grids.grid2d import Grid2D
+from utils.grids.listgrid2d import strings_to_ListGrid2D
 
 # Constants
 

@@ -1,4 +1,4 @@
-from utils.grid.grid2d import adj_coords_2d
+from utils.grids.grid2d import adj_coords_2d
 
 
 def test_adj_coords_2d():
