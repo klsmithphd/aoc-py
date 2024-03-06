@@ -1,7 +1,7 @@
-from aoc2022.day12 import parse, part1, part2,\
+from aoc2022.day12 import parse, part1, part2, \
     find_matches, transitions, shortest_path_from_start, shortest_path_from_any_a
 from utils.core import standard_puzzle_input
-from utils.grid.listgrid2d import ListGrid2D
+from utils.grids.listgrid2d import ListGrid2D
 
 d12_s0_raw = """Sabqponm
 abcryxxl

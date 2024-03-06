@@ -35,3 +35,8 @@ def vec_sum(vecs):
 def vec_add(a, b):
     """Take two vectors and return their sum"""
     return vec_sum((a, b))
+
+
+def manhattan(v1, v2):
+    """Computes the Manhattan distance (L1 norm) between two vectors"""
+    return sum(map(lambda a, b: abs(a-b), v1, v2))
