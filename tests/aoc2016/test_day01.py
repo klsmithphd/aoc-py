@@ -27,8 +27,25 @@ def test_distance():
     assert 12 == d01.distance(d01_s02)
 
 
+def test_all_points():
+    assert [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (2, 3)] == \
+        list(d01.all_points(d01_s00))
+
+
+def test_first_duplicate():
+    assert (4, 0) == d01.first_duplicate(d01.all_points(d01_s03))
+
+
+def test_distance_to_first_duplicate():
+    assert 4 == d01.distance_to_first_duplicate(d01_s03)
+
+
 day01_input = d01.parse(u.standard_puzzle_input(year=2016, day=1))
 
 
 def test_part1():
     assert 241 == d01.part1(day01_input)
+
+
+def test_part2():
+    assert 116 == d01.part2(day01_input)
