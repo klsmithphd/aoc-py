@@ -2,6 +2,7 @@
 import functools as ft
 import toolz
 import utils.grid as grid
+import utils.vectors as v
 
 # Constants
 ORIGIN = (0, 0)
@@ -29,4 +30,10 @@ def move(instructions):
     return ft.reduce(step, instructions, START)
 
 
+def distance(instructions):
+    return v.manhattan(ORIGIN, move(instructions)['pos'])
+
+
 # Puzzle solutions
+def part1(input):
+    return distance(input)
