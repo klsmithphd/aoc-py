@@ -30,3 +30,11 @@ def test_vec_sum():
 def test_vec_add():
     assert (6, 8) == v.vec_add((2, 10), (4, -2))
     assert [6, 8] == v.vec_add([2, 10], [4, -2])
+
+
+def test_manhattan():
+    assert 9 == v.manhattan((0, 0), (4, 5))
+    assert 4 == v.manhattan((-1, -1), (-2, -4))
+    # Vectors can be arbitrary n-dimensional points
+    assert 8 == v.manhattan((0, 0, 0), (1, 4, 3))
+    assert 7 == v.manhattan((3,), (-4,))
