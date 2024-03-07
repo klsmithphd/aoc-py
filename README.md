@@ -1,6 +1,30 @@
 # aoc-py
+![Workflow Status](https://github.com/klsmithphd/aoc-py/actions/workflows/python-pdm.yml/badge.svg)
+
 Solutions to [Advent of Code](https://adventofcode.com) challenges implemented 
 in Python
+
+# About
+
+[Advent of Code](https://adventofcode.com) has been an annual gift to programmers
+since 2015. It takes place for 25 days every December. A new coding challenge
+is released every day (like an 
+[advent calendar](https://en.wikipedia.org/wiki/Advent_calendar)) and consists
+of two parts. You don't *necessarily* need to write code to solve the challenge,
+but most of the time, you'll want to.
+
+This repository contains my collection of Advent of Code solutions
+implemented in [Python](https://python.org/). The solutions here are
+intentionally written in as 
+[functional](https://en.wikipedia.org/wiki/Functional_programming) a 
+style as possible without deviating too far from idiomatic python.
+I've tried to avoid mutable state and unnecessary objects/classes
+whenever I can.
+
+While this is not a professional project by any means, I've tried over time
+to improve the readability, performance, and testability of my solutions
+as a means of "sharpening the saw." I've implemented quite a few modules 
+that solve common patterns of problems that tend to pop up again and again.
 
 # Usage
 
