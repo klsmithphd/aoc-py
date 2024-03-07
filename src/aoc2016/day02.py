@@ -6,20 +6,21 @@ import functools as ft
 # Constants
 FIRST_POS = (0, 0)
 
-# 1 2 3
-# 4 5 6
-# 7 8 9
+
 SQUARE_KEYPAD = {
     (-1, 1): '1',  (0, 1): '2',  (1, 1): '3',
     (-1, 0): '4',  (0, 0): '5',  (1, 0): '6',
     (-1, -1): '7', (0, -1): '8', (1, -1): '9'
 }
+"""Position mapping for a square keypad with (0,0) = '5' and keys 
+arranged as:
+```
+1 2 3
+4 5 6
+7 8 9
+```"""
 
-#     1
-#   2 3 4
-# 5 6 7 8 9
-#   A B C
-#     D
+
 DIAMOND_KEYPAD = {
     (2, 2): '1',
     (1, 1): '2', (2, 1): '3', (3, 1): '4',
@@ -27,6 +28,15 @@ DIAMOND_KEYPAD = {
     (1, -1): 'A', (2, -1): 'B', (3, -1): 'C',
     (2, -2): 'D'
 }
+"""Position mapping for a diamond keypad with (0, 0) = '5' and keys 
+arranged as:
+```
+    1
+  2 3 4
+5 6 7 8 9
+  A B C
+    D
+```"""
 
 
 # Input parsing
