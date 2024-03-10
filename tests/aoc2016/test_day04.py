@@ -17,3 +17,7 @@ d04_s00 = [
 
 def test_parse():
     assert d04_s00 == d04.parse(d04_s00_raw)
+
+
+def test_isrealroom():
+    assert [True, True, True, False] == [d04.isrealroom(r) for r in d04_s00]
