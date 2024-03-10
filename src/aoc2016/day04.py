@@ -1,14 +1,22 @@
 """Solution to https://adventofcode.com/2016/day/4"""
 import more_itertools as mit
 import re
-from collections import Counter
+import utils.core as u
+from collections import Counter, namedtuple
+
+
+# Constants
+ALPHABET = "abcdefghijklmnopqrstuvwxyz"
 
 
 # Input parsing
+Room = namedtuple("Room", ["encrypted_name", "segment_id", "checksum"])
+
+
 def parse_line(line: str):
     code, checksum = mit.first(re.findall(r"([\w\-]*)\[(\w{5})\]", line))
     segments = code.split('-')
-    return (segments[:-1], int(segments[-1]), checksum)
+    return Room(segments[:-1], int(segments[-1]), checksum)
 
 
 def parse(input):
@@ -21,7 +29,7 @@ def sort_key(freq):
     return (-v, k)
 
 
-def isrealroom(room):
+def isrealroom(room: Room):
     encrypted_name, _, checksum = room
     freqs = Counter("".join(encrypted_name))
     chars = (c for c, f in mit.take(5, sorted(freqs.items(), key=sort_key)))
@@ -29,7 +37,14 @@ def isrealroom(room):
 
 
 def real_room_sector_id_sum(rooms):
-    return sum(room[1] for room in rooms if isrealroom(room))
+    return sum(room.segment_id for room in rooms if isrealroom(room))
+
+
+def decipher(room: Room):
+    encrypted_name, sector_id, _ = room
+    mapping = dict(zip(ALPHABET, u.rotate(sector_id % 26, ALPHABET)))
+    def decode(s): return "".join(mapping[ch] for ch in s)
+    return " ".join(decode(s) for s in encrypted_name)
 
 
 # Puzzle solutions
