@@ -29,3 +29,19 @@ def test_product():
     assert 6 == u.product([1, 2, 3])
     assert 10 == u.product([10])
     assert 1 == u.product([])
+
+
+def test_rotate():
+    assert [0, 1, 2, 3, 4] == list(u.rotate(0, range(5)))
+
+    assert [1, 2, 3, 4, 0] == list(u.rotate(1, range(5)))
+    assert [2, 3, 4, 0, 1] == list(u.rotate(2, range(5)))
+    assert [3, 4, 0, 1, 2] == list(u.rotate(3, range(5)))
+    assert [4, 0, 1, 2, 3] == list(u.rotate(4, range(5)))
+    assert [0, 1, 2, 3, 4] == list(u.rotate(5, range(5)))
+
+    assert [4, 0, 1, 2, 3] == list(u.rotate(-1, range(5)))
+    assert [3, 4, 0, 1, 2] == list(u.rotate(-2, range(5)))
+    assert [2, 3, 4, 0, 1] == list(u.rotate(-3, range(5)))
+    assert [1, 2, 3, 4, 0] == list(u.rotate(-4, range(5)))
+    assert [0, 1, 2, 3, 4] == list(u.rotate(-5, range(5)))
