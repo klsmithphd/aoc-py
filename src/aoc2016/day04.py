@@ -26,3 +26,12 @@ def isrealroom(room):
     freqs = Counter("".join(encrypted_name))
     chars = (c for c, f in mit.take(5, sorted(freqs.items(), key=sort_key)))
     return "".join(chars) == checksum
+
+
+def real_room_sector_id_sum(rooms):
+    return sum(room[1] for room in rooms if isrealroom(room))
+
+
+# Puzzle solutions
+def part1(input):
+    return real_room_sector_id_sum(input)
