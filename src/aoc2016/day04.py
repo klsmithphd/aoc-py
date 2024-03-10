@@ -10,7 +10,7 @@ ALPHABET = "abcdefghijklmnopqrstuvwxyz"
 
 
 # Input parsing
-Room = namedtuple("Room", ["encrypted_name", "segment_id", "checksum"])
+Room = namedtuple("Room", ["encrypted_name", "sector_id", "checksum"])
 
 
 def parse_line(line: str):
@@ -32,12 +32,12 @@ def sort_key(freq):
 def isrealroom(room: Room):
     encrypted_name, _, checksum = room
     freqs = Counter("".join(encrypted_name))
-    chars = (c for c, f in mit.take(5, sorted(freqs.items(), key=sort_key)))
+    chars = (c for c, _ in mit.take(5, sorted(freqs.items(), key=sort_key)))
     return "".join(chars) == checksum
 
 
 def real_room_sector_id_sum(rooms):
-    return sum(room.segment_id for room in rooms if isrealroom(room))
+    return sum(room.sector_id for room in rooms if isrealroom(room))
 
 
 def decipher(room: Room):
@@ -47,6 +47,17 @@ def decipher(room: Room):
     return " ".join(decode(s) for s in encrypted_name)
 
 
+def north_pole_objects_room(rooms):
+    room = mit.first(r for r in rooms if
+                     isrealroom(r) and
+                     decipher(r) == "northpole object storage")
+    return room.sector_id
+
+
 # Puzzle solutions
 def part1(input):
     return real_room_sector_id_sum(input)
+
+
+def part2(input):
+    return north_pole_objects_room(input)

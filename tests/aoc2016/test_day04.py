@@ -39,3 +39,7 @@ day04_input = d04.parse(u.standard_puzzle_input(year=2016, day=4))
 
 def test_part1():
     assert 361724 == d04.part1(day04_input)
+
+
+def test_part2():
+    assert 482 == d04.part2(day04_input)
