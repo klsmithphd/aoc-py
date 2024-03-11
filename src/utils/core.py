@@ -153,3 +153,13 @@ def product(iterable, /, start=1):
     Much like `sum()`, you can specify a `start` value either positionally
     or as a keyword argument to adjust the starting value for the product."""
     return ft.reduce(op.mul, iterable, start)
+
+
+def rotate(n: int, iterable):
+    """"Rotate the collection by n. Positive values of n rotate to the left,
+    meaning that values are taken from the beginning of coll and moved to
+    the end.  Negative values of n rotate to the right, meaning values
+    are taken from the end of coll and moved to the front"""
+    lst = list(iterable)
+    start = n % len(lst)
+    return it.islice(it.cycle(lst), start, start+len(lst))
