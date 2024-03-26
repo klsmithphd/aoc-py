@@ -2,7 +2,7 @@
 import itertools as it
 import functools as ft
 import more_itertools as mit
-import utils.digest as digest
+import utils.digest as dig
 
 
 # Input parsing
@@ -14,11 +14,11 @@ def first_int(pred, secret: str):
     """Find the first integer that satisfies the predicate `pred` on the MD5
     digest"""
     return mit.first(i for i in it.count(1)
-                     if pred(digest.md5_digest(f"{secret}{i}")))
+                     if pred(dig.md5_digest(f"{secret}{i}")))
 
 
-first_fivezeros_int = ft.partial(first_int, digest.isfivezerostart)
-first_sixzeros_int = ft.partial(first_int, digest.issixzerostart)
+first_fivezeros_int = ft.partial(first_int, dig.isfivezerostart)
+first_sixzeros_int = ft.partial(first_int, dig.issixzerostart)
 
 
 # Puzzle solutions

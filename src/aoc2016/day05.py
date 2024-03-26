@@ -1,7 +1,7 @@
 """Solution to https://adventofcode.com/2016/day/5"""
-import hashlib
 import itertools as it
 import more_itertools as mit
+import utils.digest as dig
 
 # Constants
 CACHED_INDICES = {
@@ -25,46 +25,52 @@ CACHED_INDICES = {
    
    Caching (hard-coding) these values saves a lot of time for the unit tests."""
 
+
 # Input parsing
-
-
 def parse(input):
     return mit.first(input)
 
 
 # Puzzle logic
-def md5_bytes(s: str):
-    return hashlib.md5(s.encode()).digest()
-
-
-def isfivezerostart(bytes):
-    return bytes[:3] < b'\x00\x00\x10'
-
-
 def five_zero_indices(prefix: str):
-    return (x for x in it.count(0) if isfivezerostart(md5_bytes(f"{prefix}{x}")))
+    """A (potentially infinite) sequence of the indices that, when
+    appended to the string `prefix`, result in an MD5 hash that starts
+    with five zeros"""
+    return (x for x in it.count(0) if
+            dig.isfivezerostart(dig.md5_digest(f"{prefix}{x}")))
 
 
 def indices_to_try(prefix):
+    """A sequence of indices to appending to the prefix. If the values are
+    already cached (hardcoded), return those. Otherwise, just iterate from
+    zero on up."""
     return CACHED_INDICES.get(prefix, it.count(0))
 
 
 def five_zero_hashes(prefix: str):
-    indices = indices_to_try(prefix)
-    bytes = (md5_bytes(f"{prefix}{idx}") for idx in indices)
-    return (hash for hash in bytes if isfivezerostart(hash))
+    """A sequence of the MD5 hashes (as bytes) for consecutive prefix-number
+    strings that start with five zeroes."""
+    hashes = (dig.md5_digest(f"{prefix}{i}") for i in indices_to_try(prefix))
+    return (d for d in hashes if dig.isfivezerostart(d))
 
 
 def password_part1(prefix: str):
+    """In part 1, the password is found using the sixth character of the first
+    eight MD5 hashes that start with five zeroes."""
     return "".join(hex(b[2])[2:] for b in mit.take(8, five_zero_hashes(prefix)))
 
 
 def pos_char_pair(bytes):
+    """For a collection of bytes representing an MD5 hash, interpret the hash
+    as having the sixth character represent a position and the seventh
+    character represent the actual password character."""
     pos, ch = bytes[2:4]
     return (pos, format(ch, "02x")[:1])
 
 
 def set_char(password, pair):
+    """If the character at position `idx` in collection `s` is seen for the first
+    time, update it to `c`, else return `s` untouched."""
     idx, ch = pair
     if password[idx] == '*':
         return password[:idx] + ch + password[idx+1:]
@@ -73,6 +79,9 @@ def set_char(password, pair):
 
 
 def password_part2(prefix: str):
+    """In part 2, the password is found by interpreting the sixth and seventh
+    characters of the MD5 hashes that start with five zeros as being the 
+    password position and character value, respectively."""
     pairs = (pos_char_pair(x) for x in five_zero_hashes(prefix))
     valid_pairs = (p for p in pairs if 0 <= p[0] <= 7)
     pwds = it.accumulate(valid_pairs, set_char, initial='********')
@@ -81,8 +90,10 @@ def password_part2(prefix: str):
 
 # Puzzle solutions
 def part1(input):
+    """Given a door id (prefix), what is the password using the logic in part 1"""
     return password_part1(input)
 
 
 def part2(input):
+    """Given a door id (prefix), what is the password using the logic in part 2"""
     return password_part2(input)
