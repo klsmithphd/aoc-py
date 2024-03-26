@@ -18,6 +18,12 @@ CACHED_INDICES = {
                  21475898, 21671457, 21679503, 21842490, 23036372,
                  23090544, 25067104, 26815976, 27230372, 27410373]
 }
+"""The first 30 indices that, when concatenated with the prefix (key),
+   result in an md5-hash that begins with five zeros. These values
+   where computed using `mit.take(30, five-zero-indices(x))` where `x` is
+   the prefix either in the sample problem or my actual input. 
+   
+   Caching (hard-coding) these values saves a lot of time for the unit tests."""
 
 # Input parsing
 
@@ -53,6 +59,30 @@ def password_part1(prefix: str):
     return "".join(hex(b[2])[2:] for b in mit.take(8, five_zero_hashes(prefix)))
 
 
+def pos_char_pair(bytes):
+    pos, ch = bytes[2:4]
+    return (pos, format(ch, "02x")[:1])
+
+
+def set_char(password, pair):
+    idx, ch = pair
+    if password[idx] == '*':
+        return password[:idx] + ch + password[idx+1:]
+    else:
+        return password
+
+
+def password_part2(prefix: str):
+    pairs = (pos_char_pair(x) for x in five_zero_hashes(prefix))
+    valid_pairs = (p for p in pairs if 0 <= p[0] <= 7)
+    pwds = it.accumulate(valid_pairs, set_char, initial='********')
+    return "".join(mit.first(it.dropwhile(lambda x: '*' in x, pwds)))
+
+
 # Puzzle solutions
 def part1(input):
     return password_part1(input)
+
+
+def part2(input):
+    return password_part2(input)
