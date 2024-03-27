@@ -27,21 +27,26 @@ CACHED_INDICES = {
 
 
 # Input parsing
-def parse(input):
-    return mit.first(input)
+parse = mit.first
 
 
 # Puzzle logic
+def digest(prefix: str):
+    def fn(num):
+        return dig.md5_digest(f"{prefix}{num}")
+    return fn
+
+
 def five_zero_indices(prefix: str):
     """A (potentially infinite) sequence of the indices that, when
     appended to the string `prefix`, result in an MD5 hash that starts
     with five zeros"""
-    return (x for x in it.count(0) if
-            dig.isfivezerostart(dig.md5_digest(f"{prefix}{x}")))
+    digester = digest(prefix)
+    return (x for x in it.count(0) if dig.isfivezerostart(digester(x)))
 
 
 def indices_to_try(prefix):
-    """A sequence of indices to appending to the prefix. If the values are
+    """A sequence of indices to try appending to the prefix. If the values are
     already cached (hardcoded), return those. Otherwise, just iterate from
     zero on up."""
     return CACHED_INDICES.get(prefix, it.count(0))
@@ -50,14 +55,15 @@ def indices_to_try(prefix):
 def five_zero_hashes(prefix: str):
     """A sequence of the MD5 hashes (as bytes) for consecutive prefix-number
     strings that start with five zeroes."""
-    hashes = (dig.md5_digest(f"{prefix}{i}") for i in indices_to_try(prefix))
-    return (d for d in hashes if dig.isfivezerostart(d))
+    digester = digest(prefix)
+    hashes = (digester(i) for i in indices_to_try(prefix))
+    return filter(dig.isfivezerostart, hashes)
 
 
 def password_part1(prefix: str):
     """In part 1, the password is found using the sixth character of the first
     eight MD5 hashes that start with five zeroes."""
-    return "".join(hex(b[2])[2:] for b in mit.take(8, five_zero_hashes(prefix)))
+    return "".join(format(b[2], "x") for b in mit.take(8, five_zero_hashes(prefix)))
 
 
 def pos_char_pair(bytes):
@@ -70,7 +76,7 @@ def pos_char_pair(bytes):
 
 def set_char(password, pair):
     """If the character at position `idx` in collection `s` is seen for the first
-    time, update it to `c`, else return `s` untouched."""
+    time, update it to `ch`, else return `s` untouched."""
     idx, ch = pair
     if password[idx] == '*':
         return password[:idx] + ch + password[idx+1:]
