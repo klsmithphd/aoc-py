@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:bd273698c317cafc80707cfa5e8cb309541d1f8cf153728b382b616347ae0b29"
+content_hash = "sha256:dc0592c49474638db77cc249f87215a615fbb363aabde836b776eba71a3994f2"
 
 [[package]]
 name = "anyio"
@@ -849,12 +849,12 @@ files = [
 
 [[package]]
 name = "more-itertools"
-version = "10.1.0"
+version = "10.2.0"
 requires_python = ">=3.8"
 summary = "More routines for operating on iterables, beyond itertools"
 files = [
-    {file = "more-itertools-10.1.0.tar.gz", hash = "sha256:626c369fa0eb37bac0291bce8259b332fd59ac792fa5497b59837309cd5b114a"},
-    {file = "more_itertools-10.1.0-py3-none-any.whl", hash = "sha256:64e0735fcfdc6f3464ea133afe8ea4483b1c5fe3a3d69852e6503b43a0b222e6"},
+    {file = "more-itertools-10.2.0.tar.gz", hash = "sha256:8fccb480c43d3e99a00087634c06dd02b0d50fbf088b380de5a41a015ec239e1"},
+    {file = "more_itertools-10.2.0-py3-none-any.whl", hash = "sha256:686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684"},
 ]
 
 [[package]]
@@ -988,11 +988,11 @@ files = [
 
 [[package]]
 name = "parse"
-version = "1.19.1"
+version = "1.20.1"
 summary = "parse() is the opposite of format()"
 files = [
-    {file = "parse-1.19.1-py2.py3-none-any.whl", hash = "sha256:371ed3800dc63983832159cc9373156613947707bc448b5215473a219dbd4362"},
-    {file = "parse-1.19.1.tar.gz", hash = "sha256:cc3a47236ff05da377617ddefa867b7ba983819c664e1afe46249e5b469be464"},
+    {file = "parse-1.20.1-py2.py3-none-any.whl", hash = "sha256:76ddd5214255ae711db4c512be636151fbabaa948c6f30115aecc440422ca82c"},
+    {file = "parse-1.20.1.tar.gz", hash = "sha256:09002ca350ad42e76629995f71f7b518670bcf93548bdde3684fd55d2be51975"},
 ]
 
 [[package]]
@@ -1028,12 +1028,12 @@ files = [
 
 [[package]]
 name = "pipe"
-version = "2.0"
-requires_python = ">=3.7"
-summary = "Module enablig a sh like infix syntax (using pipes)"
+version = "2.1"
+requires_python = ">=3.8"
+summary = "Module enabling a sh like infix syntax (using pipes)"
 files = [
-    {file = "pipe-2.0-py3-none-any.whl", hash = "sha256:12dc5baae854843d0fa8ab674ab555e58cc703eb64d8bf86da8db46b7115d07c"},
-    {file = "pipe-2.0.tar.gz", hash = "sha256:a1cf3f29f98576b7e6552231142bc711e8dd324513a2c4525fc68c33f47fabad"},
+    {file = "pipe-2.1-py3-none-any.whl", hash = "sha256:d44390a97b6c18d7e5cf5d3a6b50f7aabd1622a81dfcac48252246fcafaa5461"},
+    {file = "pipe-2.1.tar.gz", hash = "sha256:e0ee44d7a17b4cbed2fd31839d59a3409638fc2d6daa6a714e1c062ef57956db"},
 ]
 
 [[package]]
@@ -1048,12 +1048,12 @@ files = [
 
 [[package]]
 name = "pluggy"
-version = "1.2.0"
-requires_python = ">=3.7"
+version = "1.4.0"
+requires_python = ">=3.8"
 summary = "plugin and hook calling mechanisms for python"
 files = [
-    {file = "pluggy-1.2.0-py3-none-any.whl", hash = "sha256:c2fd55a7d7a3863cba1a013e4e2414658b1d07b6bc57b3919e0c63c9abb99849"},
-    {file = "pluggy-1.2.0.tar.gz", hash = "sha256:d12f0c4b579b15f5e054301bb226ee85eeeba08ffec228092f8defbaa3a4c4b3"},
+    {file = "pluggy-1.4.0-py3-none-any.whl", hash = "sha256:7db9f7b503d67d1c5b95f59773ebb58a8c1c288129a88665838012cfb07b8981"},
+    {file = "pluggy-1.4.0.tar.gz", hash = "sha256:8c85c2876142a764e5b7548e7d9a0e0ddb46f5185161049a79b7e974454223be"},
 ]
 
 [[package]]
@@ -1134,20 +1134,20 @@ files = [
 
 [[package]]
 name = "pytest"
-version = "7.4.2"
-requires_python = ">=3.7"
+version = "8.1.1"
+requires_python = ">=3.8"
 summary = "pytest: simple powerful testing with Python"
 dependencies = [
     "colorama; sys_platform == \"win32\"",
     "exceptiongroup>=1.0.0rc8; python_version < \"3.11\"",
     "iniconfig",
     "packaging",
-    "pluggy<2.0,>=0.12",
-    "tomli>=1.0.0; python_version < \"3.11\"",
+    "pluggy<2.0,>=1.4",
+    "tomli>=1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pytest-7.4.2-py3-none-any.whl", hash = "sha256:1d881c6124e08ff0a1bb75ba3ec0bfd8b5354a01c194ddd5a0a870a48d99b002"},
-    {file = "pytest-7.4.2.tar.gz", hash = "sha256:a766259cfab564a2ad52cb1aae1b881a75c3eb7e34ca3779697c23ed47c47069"},
+    {file = "pytest-8.1.1-py3-none-any.whl", hash = "sha256:2a8386cfc11fa9d2c50ee7b2a57e7d898ef90470a7a34c4b949ff59662bb78b7"},
+    {file = "pytest-8.1.1.tar.gz", hash = "sha256:ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044"},
 ]
 
 [[package]]
@@ -1548,12 +1548,12 @@ files = [
 
 [[package]]
 name = "toolz"
-version = "0.12.0"
-requires_python = ">=3.5"
+version = "0.12.1"
+requires_python = ">=3.7"
 summary = "List processing tools and functional utilities"
 files = [
-    {file = "toolz-0.12.0-py3-none-any.whl", hash = "sha256:2059bd4148deb1884bb0eb770a3cde70e7f954cfbbdc2285f1f2de01fd21eb6f"},
-    {file = "toolz-0.12.0.tar.gz", hash = "sha256:88c570861c440ee3f2f6037c4654613228ff40c93a6c25e0eba70d17282c6194"},
+    {file = "toolz-0.12.1-py3-none-any.whl", hash = "sha256:d22731364c07d72eea0a0ad45bafb2c2937ab6fd38a3507bf55eae8744aa7d85"},
+    {file = "toolz-0.12.1.tar.gz", hash = "sha256:ecca342664893f177a13dac0e6b41cbd8ac25a358e5f215316d43e2100224f4d"},
 ]
 
 [[package]]
