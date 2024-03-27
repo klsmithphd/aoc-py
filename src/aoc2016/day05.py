@@ -1,6 +1,7 @@
 """Solution to https://adventofcode.com/2016/day/5"""
 import itertools as it
 import more_itertools as mit
+import pipe as p
 import utils.digest as dig
 
 # Constants
@@ -42,7 +43,8 @@ def five_zero_indices(prefix: str):
     appended to the string `prefix`, result in an MD5 hash that starts
     with five zeros"""
     digester = digest(prefix)
-    return (x for x in it.count(0) if dig.isfivezerostart(digester(x)))
+    return it.count() | p.filter(lambda x: dig.isfivezerostart(digester(x)))
+    # return (x for x in it.count(0) if dig.isfivezerostart(digester(x)))
 
 
 def indices_to_try(prefix):
@@ -52,17 +54,32 @@ def indices_to_try(prefix):
     return CACHED_INDICES.get(prefix, it.count(0))
 
 
+@p.Pipe
+def str_join(iterable):
+    return "".join(iterable)
+
+
 def five_zero_hashes(prefix: str):
     """A sequence of the MD5 hashes (as bytes) for consecutive prefix-number
     strings that start with five zeroes."""
-    digester = digest(prefix)
-    hashes = (digester(i) for i in indices_to_try(prefix))
-    return filter(dig.isfivezerostart, hashes)
+    return indices_to_try(prefix) \
+        | p.map(digest(prefix)) \
+        | p.filter(dig.isfivezerostart)
+    # hashes = (digester(i) for i in indices_to_try(prefix))
+    # return filter(dig.isfivezerostart, hashes)
+
+
+def sixth_char(digest: bytes):
+    return format(digest[2], "x")
 
 
 def password_part1(prefix: str):
     """In part 1, the password is found using the sixth character of the first
     eight MD5 hashes that start with five zeroes."""
+    return five_zero_hashes(prefix) \
+        | p.take(8) \
+        | p.map(sixth_char) \
+        | str_join
     return "".join(format(b[2], "x") for b in mit.take(8, five_zero_hashes(prefix)))
 
 
@@ -84,14 +101,34 @@ def set_char(password, pair):
         return password
 
 
+def emit_char_data(part, bytes):
+    if part == 'part1':
+        return p.enumerate()
+    if part == 'part2':
+        return p.map(pos_char_pair)
+
+
+@p.Pipe
+def update_password(iterable):
+    return it.accumulate(iterable, set_char, initial='********')
+
+
 def password_part2(prefix: str):
     """In part 2, the password is found by interpreting the sixth and seventh
     characters of the MD5 hashes that start with five zeros as being the 
     password position and character value, respectively."""
-    pairs = (pos_char_pair(x) for x in five_zero_hashes(prefix))
-    valid_pairs = (p for p in pairs if 0 <= p[0] <= 7)
-    pwds = it.accumulate(valid_pairs, set_char, initial='********')
-    return "".join(mit.first(it.dropwhile(lambda x: '*' in x, pwds)))
+    return five_zero_hashes(prefix) \
+        | p.map(pos_char_pair) \
+        | p.filter(lambda p: 0 <= p[0] <= 7) \
+        | update_password \
+        | p.skip_while(lambda x: '*' in x) \
+        | p.take(1) \
+        | str_join
+    # return "".join(pw_chars)
+    # pairs = (pos_char_pair(x) for x in five_zero_hashes(prefix))
+    # valid_pairs = (p for p in pairs if 0 <= p[0] <= 7)
+    # pwds = it.accumulate(valid_pairs, set_char, initial='********')
+    # return "".join(mit.first(it.dropwhile(lambda x: '*' in x, pwds)))
 
 
 # Puzzle solutions
