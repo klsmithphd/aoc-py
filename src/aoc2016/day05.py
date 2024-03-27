@@ -1,5 +1,6 @@
 """Solution to https://adventofcode.com/2016/day/5"""
 import itertools as it
+import functools as ft
 import more_itertools as mit
 import pipe as p
 import utils.digest as dig
@@ -32,19 +33,18 @@ parse = mit.first
 
 
 # Puzzle logic
-def digest(prefix: str):
-    def fn(num):
-        return dig.md5_digest(f"{prefix}{num}")
-    return fn
+def md5_digest(prefix: str):
+    """For a given `prefix`, return a function that will return the MD5 digest
+    (in bytes) given a value to append to the prefix"""
+    return lambda num: dig.md5_digest(f"{prefix}{num}")
 
 
 def five_zero_indices(prefix: str):
     """A (potentially infinite) sequence of the indices that, when
     appended to the string `prefix`, result in an MD5 hash that starts
     with five zeros"""
-    digester = digest(prefix)
-    return it.count() | p.filter(lambda x: dig.isfivezerostart(digester(x)))
-    # return (x for x in it.count(0) if dig.isfivezerostart(digester(x)))
+    digest = md5_digest(prefix)
+    return it.count() | p.filter(lambda i: dig.isfivezerostart(digest(i)))
 
 
 def indices_to_try(prefix):
@@ -55,40 +55,41 @@ def indices_to_try(prefix):
 
 
 @p.Pipe
-def str_join(iterable):
-    return "".join(iterable)
+def str_join(iterable, separator=""):
+    """A Pipe that emits a string joining all the values in `iterable`,
+    separated by `separator`"""
+    return separator.join(iterable)
 
 
-def five_zero_hashes(prefix: str):
-    """A sequence of the MD5 hashes (as bytes) for consecutive prefix-number
+def five_zero_digests(prefix: str):
+    """A sequence of the MD5 digests (as bytes) for consecutive prefix-number
     strings that start with five zeroes."""
     return indices_to_try(prefix) \
-        | p.map(digest(prefix)) \
+        | p.map(md5_digest(prefix)) \
         | p.filter(dig.isfivezerostart)
-    # hashes = (digester(i) for i in indices_to_try(prefix))
-    # return filter(dig.isfivezerostart, hashes)
 
 
 def sixth_char(digest: bytes):
+    """Returns the hex value (0-f) of the sixth character (in the string
+    representation of) the MD5 digest"""
     return format(digest[2], "x")
 
 
-def password_part1(prefix: str):
-    """In part 1, the password is found using the sixth character of the first
-    eight MD5 hashes that start with five zeroes."""
-    return five_zero_hashes(prefix) \
-        | p.take(8) \
-        | p.map(sixth_char) \
-        | str_join
-    return "".join(format(b[2], "x") for b in mit.take(8, five_zero_hashes(prefix)))
-
-
-def pos_char_pair(bytes):
+def pos_char_pair(digest: bytes):
     """For a collection of bytes representing an MD5 hash, interpret the hash
     as having the sixth character represent a position and the seventh
     character represent the actual password character."""
-    pos, ch = bytes[2:4]
+    pos, ch = digest[2:4]
     return (pos, format(ch, "02x")[:1])
+
+
+def password_chars(part: str) -> p.Pipe:
+    """Apply the logic of part1 or part2 to emit pairs of position/character
+    pairs in the deciphered password"""
+    if part == 'part1':
+        return p.Pipe(lambda digest: enumerate(map(sixth_char, digest)))
+    if part == 'part2':
+        return p.map(pos_char_pair)
 
 
 def set_char(password, pair):
@@ -101,34 +102,27 @@ def set_char(password, pair):
         return password
 
 
-def emit_char_data(part, bytes):
-    if part == 'part1':
-        return p.enumerate()
-    if part == 'part2':
-        return p.map(pos_char_pair)
-
-
 @p.Pipe
 def update_password(iterable):
+    """Return an iterable (Pipe) of intermediate password guesses based
+    on a sequence of new position-character pairs"""
     return it.accumulate(iterable, set_char, initial='********')
 
 
-def password_part2(prefix: str):
-    """In part 2, the password is found by interpreting the sixth and seventh
-    characters of the MD5 hashes that start with five zeros as being the 
-    password position and character value, respectively."""
-    return five_zero_hashes(prefix) \
-        | p.map(pos_char_pair) \
+def password(part: str, prefix: str):
+    """Using the puzzle logic given by `part` (either `part1` or `part2`),
+    decipher the password for the door id (`prefix`)"""
+    return five_zero_digests(prefix) \
+        | password_chars(part) \
         | p.filter(lambda p: 0 <= p[0] <= 7) \
         | update_password \
         | p.skip_while(lambda x: '*' in x) \
         | p.take(1) \
         | str_join
-    # return "".join(pw_chars)
-    # pairs = (pos_char_pair(x) for x in five_zero_hashes(prefix))
-    # valid_pairs = (p for p in pairs if 0 <= p[0] <= 7)
-    # pwds = it.accumulate(valid_pairs, set_char, initial='********')
-    # return "".join(mit.first(it.dropwhile(lambda x: '*' in x, pwds)))
+
+
+password_part1 = ft.partial(password, 'part1')
+password_part2 = ft.partial(password, 'part2')
 
 
 # Puzzle solutions
