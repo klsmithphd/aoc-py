@@ -1,4 +1,4 @@
-"""Solution to https://adventofcode.com/2016/day/5"""
+"""Solution to https://adventofcode.com/2016/day/6"""
 import functools as ft
 import pipe as p
 from collections import Counter
