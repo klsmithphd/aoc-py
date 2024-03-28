@@ -1,4 +1,3 @@
-import itertools as it
 import aoc2016.day07 as d07
 import utils.core as u
 
