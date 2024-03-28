@@ -1,4 +1,5 @@
 import aoc2016.day07 as d07
+import utils.core as u
 
 
 d07_s00_raw = [
@@ -33,3 +34,22 @@ d07_s01 = [
 def test_parse():
     assert d07_s00 == d07.parse(d07_s00_raw)
     assert d07_s01 == d07.parse(d07_s01_raw)
+
+
+def test_hasabba():
+    assert False == d07.hasabba("abbc")
+    assert False == d07.hasabba("aaaa")
+    assert True == d07.hasabba("abba")
+    assert True == d07.hasabba("aaaaxyyx")
+
+
+def test_hastlssupport():
+    assert [True, False, False, True] == [
+        d07.hastlssupport(ip) for ip in d07_s00]
+
+
+day07_input = d07.parse(u.standard_puzzle_input(year=2016, day=7))
+
+
+def test_part1():
+    assert 110 == d07.part1(day07_input)
