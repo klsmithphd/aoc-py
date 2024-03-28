@@ -1,3 +1,4 @@
+import itertools as it
 import aoc2016.day07 as d07
 import utils.core as u
 
@@ -48,8 +49,24 @@ def test_hastlssupport():
         d07.hastlssupport(ip) for ip in d07_s00]
 
 
+def test_all_abas():
+    assert [('aba', 'a', 'b')] == d07.all_abas("aba")
+    assert [('zaz', 'z', 'a'),
+            ('zbz', 'z', 'b')] == d07.all_abas("zazbz")
+    assert [] == d07.all_abas("aaa")
+
+
+def test_hasslssupport():
+    assert [True, False, True, True] == [
+        d07.hassslsupport(ip) for ip in d07_s01]
+
+
 day07_input = d07.parse(u.standard_puzzle_input(year=2016, day=7))
 
 
 def test_part1():
     assert 110 == d07.part1(day07_input)
+
+
+def test_part2():
+    assert 242 == d07.part2(day07_input)
