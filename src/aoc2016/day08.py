@@ -34,49 +34,42 @@ def parse(input):
 
 # Puzzle logic
 def init_screen(width, height):
+    """Initialize a (w x h) screen with all pixels set to off (zero)"""
     return [[0 for _ in range(width)] for _ in range(height)]
 
 
-# Copied from 2015/day06
-# def update_slice(up_fn, start, end, lst):
-#     """Update a subset (slice) of the values in a list from start (inclusive)
-#     to end (exclusive)"""
-#     return lst[:start] + [up_fn(i) for i in lst[start:end]] + lst[end:]
-
-
-# Copied from 2015/day06
-# def update_grid_immutable(update_fn, grid, instruction):
-#     """Updates the `grid` according to the `instruction` using the
-#     interpretation of the `update_fn`"""
-#     cmd, start, end = instruction
-#     sx, sy = start
-#     ex, ey = end
-#     # This partial function updates the x-values within a y-slice
-#     update_row = ft.partial(update_slice, ft.partial(update_fn, cmd), sx, ex+1)
-#     return update_slice(update_row, sy, ey+1, grid)
-
-
 def set_column(screen, pos, new_col):
+    """Replace the column indexed by `pos` in a 2-dimensional list-of-lists (screen)
+    with the values in `new_col`"""
     def new_row(old_row, new_val):
+        """The new_row helper function returns a new row list with the 
+        value at `pos` replaced with `new_val` """
         return old_row[:pos] + [new_val] + old_row[pos+1:]
-    return [new_row(old, new) for old, new in zip(screen, new_col)]
-    # return list(map(new_row, screen, new_col))
+    return list(map(new_row, screen, new_col))
 
 
 def apply_rotate(screen, dim, pos, amount):
-    if dim == "column":
-        column = (row[pos] for row in screen)
-        return set_column(screen, pos, u.rotate(-amount, column))
-    else:
-        return screen[:pos] + [list(u.rotate(-amount, screen[pos]))] + screen[pos+1:]
+    """Apply a rotate command to the `screen` along `dim=(row|column)` at 
+    position `pos` with values rotated by `amount`"""
+    match dim:
+        case "column":
+            column = (row[pos] for row in screen)
+            return set_column(screen, pos, u.rotate(-amount, column))
+        case "row":
+            return screen[:pos] \
+                + [list(u.rotate(-amount, screen[pos]))] \
+                + screen[pos+1:]
 
 
 def apply_rect(screen, width, height):
+    """Apply a rect command to the `screen`, turning on pixels in a
+    width-by-height swath starting at the upper left corner"""
     return [[1 for _ in range(width)] + row[width:] for row in screen[:height]] \
         + screen[height:]
 
 
 def step(screen, cmd):
+    """Apply a single command `cmd` to update the `screen`"""
     match cmd:
         case {"cmd": "rect", "width": w, "height": h}:
             return apply_rect(screen, w, h)
@@ -85,23 +78,29 @@ def step(screen, cmd):
 
 
 def final_state(width, height, cmds):
+    """Return the final screen configuration for a width-by-height screen of
+    pixels after applying all commands"""
     return ft.reduce(step, cmds, init_screen(width, height))
 
 
 def lit_pixels(screen):
+    """The total number of lit pixels on the screen"""
     return sum(it.chain(*screen))
 
 
 def screen_to_str(screen):
+    """A block-character string representation of the screen"""
     CHAR_MAP = {0: ' ', 1: '#'}
     return '\n'.join(("".join(CHAR_MAP[c] for c in row) for row in screen))
 
 
 # Puzzle solutions
 def part1(input):
+    """How many pixels are lit up after following the instructions?"""
     return lit_pixels(final_state(SCREEN_WIDTH, SCREEN_HEIGHT, input))
 
 
 def part2(input):
+    """What chacters do the pixels on the screen spell in block characters?"""
     print(screen_to_str(final_state(SCREEN_WIDTH, SCREEN_HEIGHT, input)))
     return "EOARGPHYAO"
