@@ -71,3 +71,7 @@ day08_input = d08.parse(u.standard_puzzle_input(year=2016, day=8))
 
 def test_part1():
     assert 128 == d08.part1(day08_input)
+
+
+def test_part2():
+    assert "EOARGPHYAO" == d08.part2(day08_input)

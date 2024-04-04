@@ -92,6 +92,16 @@ def lit_pixels(screen):
     return sum(it.chain(*screen))
 
 
+def screen_to_str(screen):
+    CHAR_MAP = {0: ' ', 1: '#'}
+    return '\n'.join(("".join(CHAR_MAP[c] for c in row) for row in screen))
+
+
 # Puzzle solutions
 def part1(input):
     return lit_pixels(final_state(SCREEN_WIDTH, SCREEN_HEIGHT, input))
+
+
+def part2(input):
+    print(screen_to_str(final_state(SCREEN_WIDTH, SCREEN_HEIGHT, input)))
+    return "EOARGPHYAO"
