@@ -13,7 +13,7 @@ SCREEN_HEIGHT = 6
 # Input parsing
 def parse_rect(line: str):
     w, h = (int(i) for i in re.findall(r"\d+", line))
-    return {"cmd": "rect", "width": w, "height": 2}
+    return {"cmd": "rect", "width": w, "height": h}
 
 
 def parse_rotate(line: str):
