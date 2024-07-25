@@ -22,8 +22,8 @@ def test_last_pad_key():
     assert 22728 == d14.last_pad_key(d14.md5, d14_s00)
 
 
-# def test_last_stretched_pad_key():
-#     assert 22551 == d14.last_pad_key(d14.smd5, d14_s00)
+def test_last_stretched_pad_key():
+    assert 22551 == d14.last_pad_key(d14.smd5, d14_s00)
 
 
 day14_input = d14.parse(u.standard_puzzle_input(year=2016, day=14))
