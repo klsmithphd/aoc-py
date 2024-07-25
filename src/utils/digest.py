@@ -6,6 +6,10 @@ def md5_digest(s: str):
     """MD5 digest (as bytes) of the supplied string"""
     return hashlib.md5(s.encode()).digest()
 
+def md5_str(s: str):
+    """MD5 digest (in lowercase hex string) of the supplied string"""
+    return hashlib.md5(s.encode()).hexdigest()
+
 
 def isfivezerostart(digest: bytes):
     """Does the supplied digest start with 5 zeros"""
